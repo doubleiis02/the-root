@@ -1,11 +1,8 @@
 # cruisin-for-a-bruin
 
 Source code for YTP app
+Deployment: https://festive-meitner-dce61e.netlify.app/
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
 
 ### `npm start`
 
