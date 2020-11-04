@@ -4,6 +4,9 @@ Source code for YTP app\
 Deployment: https://festive-meitner-dce61e.netlify.app/ \
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+### `npm install`
+Installs npm to your local cloned repository. Do this in order to test your code locally!
+
 ### `npm start`
 
 Runs the app in the development mode.\
