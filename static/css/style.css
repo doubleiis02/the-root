@@ -104,6 +104,12 @@ body {
     background: #f1f1f1;
 }
 
+.class-name-form {
+    width: 105px;
+    position: relative;
+    bottom: 2px;
+}
+
 .class-icon-container {
     display: flex;
     flex-direction: row;
