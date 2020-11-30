@@ -124,13 +124,13 @@ def send_sms():
         # 2. Find the account SID and auth token here and generate a Twilio phone number here as well: https://www.twilio.com/console
     # after testing, make sure you remove any info related to your account before pushing to the repo
 
-    account_sid = "ACac37375f5a3dfe6441f409bca3991a65"
-    auth_token = "9c2286b24b2a3d15c9f39130298d5aa9"
+    account_sid = "ACCOUNT-SID"
+    auth_token = "AUTH-TOKEN"
     client = Client(account_sid, auth_token)
 
     message = client.messages.create(
-        to="+19496079673", # This is the number that the message will be sent to. Change it to your phone number to test it out
-        from_="+12184266434",
+        to="TWILIO-NUMBER", # This is the number that the message will be sent to. Change it to your phone number to test it out
+        from_="RECEIVER-NUMBER,
         body=msg
     )
 
