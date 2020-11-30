@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>Survey for {{ lessonName }}</h1>
+        <form action="{{ url_for('create_survey', lesson=lessonName) }}" id='create-survey-form' method='post'>
+            <input type='text' id='survey-question' name='survey-question' placeholder='Insert question here' >
+            <input  class="" type = "submit" value = "Create Survey" />
+        </form>
+    </body>
+</html>
