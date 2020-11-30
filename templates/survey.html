@@ -7,7 +7,7 @@
         <h1>{{ lessonName }}</h1> 
         Question 1:
         {{ question }}
-        <form action="{{ url_for('add_response') }}">
+        <form action="{{ url_for('add_response', lessonCode=code) }}" id='survey-answer-form' method='post'>
             <input type='text' id='feedback' name='feedback'/>
             <input type='submit' value="Sumbit"/>
         </form>

@@ -3,6 +3,7 @@ from twilio import twiml
 from twilio.twiml.messaging_response import Message, MessagingResponse
 from twilio.rest import Client
 import random
+import string
 
 app = Flask(__name__)
 
@@ -33,57 +34,67 @@ def about():
 if __name__== '__main__':
     app.run(debug=True)
 
+
+
+# ---------------------------------------------------------------------
+
+
+
+# adds a new class to the list of classes in index.html
 classes = ["class 1", "class 2"]
 @app.route('/add_class', methods = ['POST', 'GET'])
 def add_class():
-    if request.method == 'POST':
-        name = request.form['class-name-input']
-    else:
-        name = request.args.get('class-name-input')
+    name = request.form['class-name-input']
     classes.append(name)
     print(classes)
     return render_template('index.html')
 
-surveys = {"abcdef" : ["Science", "How did you feel about today's lesson?"]}
+# a dictionary that keeps track of every survey ever created
+# key: the code
+# value: a list of size 3, index 0 = the lesson name, index 1 = the survey question, and index 2 = list of student responses
+surveys = {}
 
+
+# the user clicks on a class icon -> moves to createSurvey.html
+@app.route('/add_survey', methods = ['GET'])
+def add_survey():
+    lesson = request.args.get('lessonName')
+    return render_template('createSurvey.html', lessonName=lesson)
+
+# the user is at createSurvey.html and then submits a form -> moves to newly created lesson.html
 @app.route("/create_survey", methods=['GET', 'POST'])
 def create_survey():
-    if request.method == 'POST':
-        q = request.form['survey-question']
-        lesson = request.form['lesson']
-    else:
-        q = request.args.get('survey-question')
-        lesson = request.form['lesson']
-        
+    q = request.form['survey-question']
+    lesson = request.args.get('lesson')
     code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
-    surveys[code] = [lesson, q]
-    return "created survey"
+    surveys[code] = [lesson, q, []]
+    return render_template('lesson.html', code=code, lessonName=lesson, question=q)
 
+# link to the code inputting page for students
+@app.route("/goto_code_page")
+def goto_code_page():
+    return render_template('code.html')
+
+# student is at the code.html and inputs code for the survey -> moves to survey.html
 @app.route("/enter_code", methods=['GET', 'POST'])
 def enter_code():
-    if request.method == 'POST':
-        code = request.form['code']
-    else:
-        code = request.args.get('code')
-    return render_template('survey.html', lessonName=surveys[code][0], question=surveys[code][1])
+    code = request.form['code']
+    return render_template('survey.html', code=code, lessonName=surveys[code][0], question=surveys[code][1])
 
-responseList = []
-
+# student submits their response in survey.html -> moves to submitted.html
 @app.route("/add_response", methods=['GET', 'POST'])
 def add_response():
-    if request.method == 'POST':
-        response = request.form['feedback']
-    else:
-        response = request.args.get('feedback')
-    responseList.append(response)
-    print(responseList)
+    response = request.form['feedback']
+    code = request.args.get('lessonCode')
+    surveys[code][2].append(response)
+    print(surveys)
     return render_template('submitted.html')
     
 
 
 
 
-
+# ---------------------------------------------------------------------
 
 
 
