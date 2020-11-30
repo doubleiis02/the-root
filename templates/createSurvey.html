@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <form action="{{ url_for('send_sms') }}" id='create-survey-form' method='post'>
+            <input type='text' id='lesson' name='lesson' placeholder="Insert lesson name">
+            <input type='text' id='survey-question' name='survey-question' placeholder='Insert question here' >
+            <input  class="" type = "submit" value = "Create Survey" />
+        </form>
+    </body>
+</html>

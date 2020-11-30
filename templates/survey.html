@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+    </head>
+    <body>
+        <h1>{{ lessonName }}</h1> 
+        Question 1:
+        {{ question }}
+        <form action="{{ url_for('add_response') }}">
+            <input type='text' id='feedback' name='feedback'/>
+            <input type='submit' value="Sumbit"/>
+        </form>
+    </body>
+</html>
