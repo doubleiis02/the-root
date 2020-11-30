@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <form action="{{ url_for('add_class') }}" id='class-name-form' method='post'>
+            <label for="class-name-form">Enter a name for your new class:</label>
+            <input type='text' id='class-name-input' name='class-name-input' placeholder='New Class Name' class='class-name-form'>
+            <br>
+            <label for="pri-class-color-input">Pick a primary class color:</label>
+            <input type="color" id="pri-class-color-input" name="pri-class-color-input" value="#0000ff">
+            <br>
+            <label for="sec-class-color-input">Pick a secondary class color:</label>
+            <input type="color" id="sec-class-color-input" name="sec-class-color-input" value="#0000ff">
+            <br>
+            <input class="add-class-button" type = "submit" value = "Add class" />
+        </form>
+    </body>
+</html>
