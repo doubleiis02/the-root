@@ -4,6 +4,7 @@ from twilio.twiml.messaging_response import Message, MessagingResponse
 from twilio.rest import Client
 import random
 import string
+import pymongo
 
 app = Flask(__name__)
 
@@ -19,7 +20,6 @@ class_list = [Classes('English 1B', '#64dfd4', '#83D4CD'), Classes('English 1C',
                 Classes('English 1D', '#3fb9d8', '#56B0D2'), Classes('English 1E', '#83b969', '#7EB671')]
 
 # class_list = [Classes('Science', '#000000', '#cc6464')]
-
 
 @app.route('/')
 def index():
@@ -41,13 +41,24 @@ if __name__== '__main__':
 
 
 # adds a new class to the list of classes in index.html
-classes = ["class 1", "class 2"]
 @app.route('/add_class', methods = ['POST', 'GET'])
 def add_class():
-    name = request.form['class-name-input']
-    classes.append(name)
-    print(classes)
-    return render_template('index.html')
+    if request.method == 'POST':
+        name = request.form['class-name-input']
+        primary_color = request.form['pri-class-color-input']
+        secondary_color = request.form['sec-class-color-input']
+    else:
+        name = request.args.get('class-name-input')
+        primary_color = request.args.get('pri-class-color-input')
+        secondary_color = request.args.get('sec-class-color-input')
+    new = Classes(name, primary_color, secondary_color)
+    class_list.append(new)
+    print(class_list)
+    return render_template('index.html', class_list=class_list)
+
+@app.route('/add_class_page')
+def add_class_page():
+    return render_template('addClass.html')
 
 # a dictionary that keeps track of every survey ever created
 # key: the code
@@ -142,3 +153,4 @@ def incoming_sms():
     print(message_body)
 
     return str(resp)
+
