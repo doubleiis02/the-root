@@ -1,7 +1,8 @@
 import boto3
 import json
 
-comprehend = boto3.client('comprehend', aws_access_key_id="INSERT ACCESS KEY ID HERE", aws_secret_access_key="INSERT SECRET ACCESS KEY HERE", region_name='us-east-1')
+comprehend = boto3.client('comprehend', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
+
 
                 
 text = "I don't understand the pythagorean theorem."
