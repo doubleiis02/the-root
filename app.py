@@ -1,12 +1,23 @@
+<<<<<<< HEAD
 from flask import Flask, render_template, request, redirect, url_for
+=======
+from flask import Flask, render_template, request, flash
+>>>>>>> main
 from twilio import twiml
 from twilio.twiml.messaging_response import Message, MessagingResponse
 from twilio.rest import Client
 import random
 import string
 import pymongo
+import boto3
 
 app = Flask(__name__)
+app.secret_key="super secret key"
+
+dynamodb = boto3.resource('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
+from boto3.dynamodb.conditions import Key, Attr
+
+
 
 current_classes = ["English 1B", "English 1C", "English 1D", "English 1E"]
 
@@ -19,6 +30,7 @@ class Classes:
 class_list = [Classes('English 1A', '#67d7ce', '#b5faf6'), Classes('English 1B', '#91cc49', '#d2f68b'),
                 Classes('English 1C', '#2cb2d6', '#71e9fa'), Classes('English 1D', '#7cb36e', '#b8ebac')]
 
+<<<<<<< HEAD
 class Lesson:
     def __init__(self, name, className, bg, blobfill, code, questions, responses):
         self.name = name
@@ -34,9 +46,24 @@ lesson_list = [
     Lesson('Week 1', 'English 1B', '#91cc49', '#d2f68b', 'fghijk', ["How do you feel about the class?", "How can the class be improved?"], [["It's alright", "idk"], ["Great!", "less homework"]])
 ]
 
+=======
+>>>>>>> main
 @app.route('/')
+def signin():
+    return render_template('signup.html')
+
+@app.route('/home')
 def index():
+<<<<<<< HEAD
     return render_template('index.html', class_list=class_list)
+=======
+    return render_template('index.html', current_classes=current_classes, class_list=class_list)
+
+@app.route('/about')
+def about():
+    print("This is the about page")
+    return "<a href='/home'> Return to homepage </a>"
+>>>>>>> main
 
 if __name__== '__main__':
     app.run(debug=True)
@@ -65,6 +92,54 @@ def dashboard():
     className = request.args.get('className')
     color = request.args.get('color')
     return render_template('dashboard.html', className=className, color=color)
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    if request.method == 'POST':
+        name = request.form['name-input']
+        email = request.form['email-input']
+        password = request.form['password-input']
+        
+        table = dynamodb.Table('users')
+        
+        table.put_item(
+                Item={
+        'name': name,
+        'email': email,
+        'password': password
+            }
+        )
+
+        return render_template('login.html')
+    return render_template('signup.html')
+
+@app.route('/login')
+def login():    
+    return render_template('login.html')
+
+
+@app.route('/check', methods=['POST'])
+def check():
+    if request.method=='POST':
+        
+        email = request.form['email-input']
+        password = request.form['password-input']
+        
+        table = dynamodb.Table('users')
+        response = table.query(
+                KeyConditionExpression=Key('email').eq(email)
+        )
+        print("HELLO")
+        print(response)
+        items = response['Items']
+        if not items:
+            msg = "Login Unsuccessful. Double check your information"
+            return render_template("login.html", msg = msg)
+        name = items[0]['name']
+        print(items[0]['password'])
+        if password == items[0]['password']:
+            return render_template("index.html", name = name, current_classes=current_classes, class_list=class_list)
+    return render_template("login.html")
 
 # a dictionary that keeps track of every survey ever created
 # key: the code
@@ -161,4 +236,5 @@ def incoming_sms():
     print(message_body)
 
     return str(resp)
+
 
