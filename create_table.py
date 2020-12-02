@@ -1,5 +1,5 @@
 import boto3
-dynamodb = boto3.client('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-2')
+dynamodb = boto3.client('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-2')
 
 # Create the DynamoDB table.
 table = dynamodb.create_table(
