@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <p>SIGN UP</p>
+        <form action="{{ url_for('signup') }}" id='sign-up' method='post'>
+            <label for="name-input">Name:</label>
+            <input type='text' id='name-input' name='name-input' placeholder='Input Name Here'>
+            <br>
+            <label for="email-input">Email:</label>
+            <input type="text" id="email-input" name="email-input" placeholder='Input Email Here'>
+            <br>
+            <label for="password-input">Password:</label>
+            <input type="password" id="password-input" name="password-input" placeholder='Input Password Here'>
+            <br>
+            <input type = "submit" value = "Sign Up"/>
+        </form>
+        <a href="/login" >You already have an account? Login here.</a>
+    </body>
+</html>

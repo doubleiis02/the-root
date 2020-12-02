@@ -1,7 +1,13 @@
-from flask import Flask, render_template, request
-import pymongo
+from flask import Flask, render_template, request, flash
+import boto3
 
 app = Flask(__name__)
+app.secret_key="super secret key"
+
+dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
+from boto3.dynamodb.conditions import Key, Attr
+
+
 
 current_classes = ["English 1B", "English 1C", "English 1D", "English 1E"]
 
@@ -14,17 +20,18 @@ class Classes:
 class_list = [Classes('English 1B', '#64dfd4', '#83D4CD'), Classes('English 1C', '#9ed34e', '#9EC95D'),
                 Classes('English 1D', '#3fb9d8', '#56B0D2'), Classes('English 1E', '#83b969', '#7EB671')]
 
-# class_list = [Classes('Science', '#000000', '#cc6464')]
-
 @app.route('/')
+def signin():
+    return render_template('signup.html')
+
+@app.route('/home')
 def index():
     return render_template('index.html', current_classes=current_classes, class_list=class_list)
-
 
 @app.route('/about')
 def about():
     print("This is the about page")
-    return "<a href='/'> Return to homepage </a>"
+    return "<a href='/home'> Return to homepage </a>"
 
 if __name__== '__main__':
     app.run(debug=True)
@@ -47,3 +54,51 @@ def add_class():
 @app.route('/add_class_page')
 def add_class_page():
     return render_template('addClass.html')
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    if request.method == 'POST':
+        name = request.form['name-input']
+        email = request.form['email-input']
+        password = request.form['password-input']
+        
+        table = dynamodb.Table('users')
+        
+        table.put_item(
+                Item={
+        'name': name,
+        'email': email,
+        'password': password
+            }
+        )
+
+        return render_template('login.html')
+    return render_template('signup.html')
+
+@app.route('/login')
+def login():    
+    return render_template('login.html')
+
+
+@app.route('/check', methods=['POST'])
+def check():
+    if request.method=='POST':
+        
+        email = request.form['email-input']
+        password = request.form['password-input']
+        
+        table = dynamodb.Table('users')
+        response = table.query(
+                KeyConditionExpression=Key('email').eq(email)
+        )
+        print("HELLO")
+        print(response)
+        items = response['Items']
+        if not items:
+            msg = "Login Unsuccessful. Double check your information"
+            return render_template("login.html", msg = msg)
+        name = items[0]['name']
+        print(items[0]['password'])
+        if password == items[0]['password']:
+            return render_template("index.html", name = name, current_classes=current_classes, class_list=class_list)
+    return render_template("login.html")
