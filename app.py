@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from flask import Flask, render_template, request, redirect, url_for
-=======
-from flask import Flask, render_template, request, flash
->>>>>>> main
+from flask import Flask, render_template, request, redirect, url_for, flash
 from twilio import twiml
 from twilio.twiml.messaging_response import Message, MessagingResponse
 from twilio.rest import Client
@@ -30,7 +26,6 @@ class Classes:
 class_list = [Classes('English 1A', '#67d7ce', '#b5faf6'), Classes('English 1B', '#91cc49', '#d2f68b'),
                 Classes('English 1C', '#2cb2d6', '#71e9fa'), Classes('English 1D', '#7cb36e', '#b8ebac')]
 
-<<<<<<< HEAD
 class Lesson:
     def __init__(self, name, className, bg, blobfill, code, questions, responses):
         self.name = name
@@ -46,24 +41,13 @@ lesson_list = [
     Lesson('Week 1', 'English 1B', '#91cc49', '#d2f68b', 'fghijk', ["How do you feel about the class?", "How can the class be improved?"], [["It's alright", "idk"], ["Great!", "less homework"]])
 ]
 
-=======
->>>>>>> main
 @app.route('/')
 def signin():
     return render_template('signup.html')
 
 @app.route('/home')
 def index():
-<<<<<<< HEAD
     return render_template('index.html', class_list=class_list)
-=======
-    return render_template('index.html', current_classes=current_classes, class_list=class_list)
-
-@app.route('/about')
-def about():
-    print("This is the about page")
-    return "<a href='/home'> Return to homepage </a>"
->>>>>>> main
 
 if __name__== '__main__':
     app.run(debug=True)
