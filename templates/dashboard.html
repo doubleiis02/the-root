@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="stylesheet" href="/static/css/dashboard.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    </head>
+    <body class="App">
+        {% include "nav.html" %}
+        {% include "circles.html" %}
+
+        <svg class='ellipse' width="375" height="183" viewBox="0 0 375 183" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="0" cy="-24.5" rx="270" ry="220" fill="{{ color }}" fill-opacity="0.65"/>
+        </svg>
+            
+        <div class="page"> <!-- flex column -->
+            <div class="dashboard-header">
+                <img class="profile-pic" src="/static/img/profile-pic.png" />
+                <div class="dashboard-title">
+                    <div>Ms. Anderson's</div>
+                    <div class="bold large">{{ className }} Dashboard</div>
+                </div>
+            </div>
+            <div class="suggested-actions">
+                <b class="suggestion">Suggested Actions</b>
+                <div class="suggestion"><input type=checkbox id="s1"><label for="s1"><b>Great Gatsby: </b></label>Explain New vs. Old Money</div>
+                <div class="suggestion"><input type=checkbox value="s2"><label for="s2"><b>Prepositions: </b></label>Students would like to see more sentence use examples</div>
+                <div class="suggestion"><input type=checkbox value="s3"><label for="s3"><b>Active vs. Passive Voice: </b></label>Another group exercise might help</div>
+            </div>
+            <div class="welcome left">
+                <b>Student Sentiment</b>
+                <div class="gray-small">Week of December 6</div>
+            </div>
+            <div class="sentiment-chart">Student sentiment chart goes here</div>
+        </div>
+    </body>
+</html>

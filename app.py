@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from twilio import twiml
 from twilio.twiml.messaging_response import Message, MessagingResponse
 from twilio.rest import Client
@@ -16,20 +16,27 @@ class Classes:
         self.bg = bg
         self.blobfill = blobfill
 
-class_list = [Classes('English 1B', '#64dfd4', '#83D4CD'), Classes('English 1C', '#9ed34e', '#9EC95D'),
-                Classes('English 1D', '#3fb9d8', '#56B0D2'), Classes('English 1E', '#83b969', '#7EB671')]
+class_list = [Classes('English 1A', '#67d7ce', '#b5faf6'), Classes('English 1B', '#91cc49', '#d2f68b'),
+                Classes('English 1C', '#2cb2d6', '#71e9fa'), Classes('English 1D', '#7cb36e', '#b8ebac')]
 
-# class_list = [Classes('Science', '#000000', '#cc6464')]
+class Lesson:
+    def __init__(self, name, className, bg, blobfill, code, questions, responses):
+        self.name = name
+        self.className = className
+        self.bg = bg
+        self.blobfill = blobfill
+        self.code = code
+        self.questions = questions
+        self.responses = responses
+
+lesson_list = [
+    Lesson('Week 1', 'English 1A', '#67d7ce', '#b5faf6', 'abcde', ["How did you like the class?", "Any suggestions?"], [["Great", "nope"], ["Amazing", "no"]]),
+    Lesson('Week 1', 'English 1B', '#91cc49', '#d2f68b', 'fghijk', ["How do you feel about the class?", "How can the class be improved?"], [["It's alright", "idk"], ["Great!", "less homework"]])
+]
 
 @app.route('/')
 def index():
-    return render_template('index.html', current_classes=current_classes, class_list=class_list)
-
-
-@app.route('/about')
-def about():
-    print("This is the about page")
-    return "<a href='/'> Return to homepage </a>"
+    return render_template('index.html', class_list=class_list)
 
 if __name__== '__main__':
     app.run(debug=True)
@@ -38,35 +45,36 @@ if __name__== '__main__':
 
 # ---------------------------------------------------------------------
 
-
+# user clicks on '+' add class button in index.html -> move to addClass.html
+@app.route('/add_class_page')
+def add_class_page():
+    return render_template('addClass.html')
 
 # adds a new class to the list of classes in index.html
 @app.route('/add_class', methods = ['POST', 'GET'])
 def add_class():
-    if request.method == 'POST':
-        name = request.form['class-name-input']
-        primary_color = request.form['pri-class-color-input']
-        secondary_color = request.form['sec-class-color-input']
-    else:
-        name = request.args.get('class-name-input')
-        primary_color = request.args.get('pri-class-color-input')
-        secondary_color = request.args.get('sec-class-color-input')
-    new = Classes(name, primary_color, secondary_color)
-    class_list.append(new)
-    print(class_list)
-    return render_template('index.html', class_list=class_list)
+    name = request.form['class-name-input']
+    primary_color = request.form['pri-class-color-input']
+    secondary_color = request.form['sec-class-color-input']
+    class_list.append(Classes(name, primary_color, secondary_color)) 
+    return redirect(url_for('index', class_list=class_list))
 
-@app.route('/add_class_page')
-def add_class_page():
-    return render_template('addClass.html')
+# user clicks on a class icon in index.html -> moves to that class's dashboard
+@app.route('/dashboard')
+def dashboard():
+    className = request.args.get('className')
+    color = request.args.get('color')
+    return render_template('dashboard.html', className=className, color=color)
 
 # a dictionary that keeps track of every survey ever created
 # key: the code
 # value: a list of size 3, index 0 = the lesson name, index 1 = the survey question, and index 2 = list of student responses
 surveys = {}
 
+@app.route('/lessons')
+def lessons():
+    return render_template('lessonList.html', lesson_list=lesson_list)
 
-# the user clicks on a class icon -> moves to createSurvey.html
 @app.route('/add_survey', methods = ['GET'])
 def add_survey():
     lesson = request.args.get('lessonName')
@@ -128,9 +136,9 @@ def send_sms():
     auth_token = "AUTH-TOKEN"
     client = Client(account_sid, auth_token)
 
-    message = client.messages.create(
+    client.messages.create(
         to="TWILIO-NUMBER", # This is the number that the message will be sent to. Change it to your phone number to test it out
-        from_="RECEIVER-NUMBER,
+        from_="RECEIVER-NUMBER",
         body=msg
     )
 

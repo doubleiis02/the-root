@@ -6,6 +6,13 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+a:link {
+    text-decoration: none;
+}
+a:visited {
+    text-decoration: none;
+}
   
 .App {
     text-align: center;
@@ -15,7 +22,8 @@ body {
 }
 
 .nav {
-    position: relative;
+    position: fixed;
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -23,6 +31,7 @@ body {
     background: #eff0f0;
     box-shadow: -10px 0px 5px 3px rgb(207, 207, 207);
     z-index: 10;
+    top: 0;
 }
 
 .nav-button {
@@ -37,26 +46,31 @@ body {
     background: none;
 }
 
+.nav-button-link:hover {
+    background: #dadada;
+}
+
 .circle-top {
-    position: absolute;
+    position: fixed;
     left: 0;
     overflow: visible;
     z-index: 0;
 }
 
 .circle-bottom {
-    position: absolute;
+    position: fixed;
     right: 0;
     bottom: 0;
     overflow: visible;
     z-index: 0;
 }
 
-.homepage {
+.page {
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 1.5rem;
+    margin-top: 50px;
 }
 
 .homepage-header {
@@ -79,7 +93,7 @@ body {
 
 .your-courses {
     font-weight: bold;
-    font-size: 0.9375rem;
+    font-size: 1rem;
     color: #8C8C8C;
     margin: 15px 0px 15px 0px;
     text-align: left;
@@ -89,18 +103,18 @@ body {
     z-index: 1;
 }
 
-.add-class-button {
+.plus-button {
     background: none;
     border: none;
     border-radius: 100px;
     padding: 0.1875rem 0.625rem 0.1875rem 0.625rem;
     font-size: 1.5rem;
 }
-.add-class-button:focus {
+.plus-button:focus {
     outline: none;
     background: none;
 }
-.add-class-button:hover {
+.plus-button:hover {
     background: #f1f1f1;
 }
 
@@ -116,7 +130,7 @@ body {
     align-items: center;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    max-width: 450px;
+    width: 450px;
     margin-top: 50px;
     position: relative;
     z-index: 1;
@@ -140,15 +154,90 @@ body {
     top: -15px;
     left: 30px;
     margin-bottom: 15px;
+    z-index: 2;
 }
 
 .class-name {
     position: relative;
     left: -5px;
+    z-index: 2;
 }
 
 .class-mover {
     position: relative;
     bottom: 115px;
     left: 123px;
+    z-index: 3;
+}
+
+/* addClass.html */
+
+.hide {
+    display: none;
+}
+
+.add-class-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    max-width: 450px;
+    margin-top: 50px;
+    position: relative;
+    z-index: 1;
+    font-size: 0.9375rem;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.new-class-name {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.no-shadow:hover {
+    box-shadow: none;
+}
+
+.add-class-button {
+    background: none;
+    border: solid 1px #dfdfdf;
+    border-radius: 100px;
+    padding: 0.1875rem 0.625rem 0.1875rem 0.625rem;
+    font-size: 1.2rem;
+}
+.add-class-button:focus {
+    outline: none;
+    background: none;
+}
+.add-class-button:hover {
+    background: #f1f1f1;
+}
+
+/* lessonList.html */
+
+.short {
+    height: 150px;
+    width: 150px;
+    margin: 12px 5px 12px 5px;
+}
+
+.lesson-class-name {
+    position: relative;
+    left: -10px;
+    top: -65px;
+    z-index: 2;
+    font-size: 1rem;
+}
+
+.lesson-name {
+    position: relative;
+    left: -10px;
+    top: -65px;
+    z-index: 2;
 }
