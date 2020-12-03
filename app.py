@@ -210,6 +210,21 @@ def create_survey():
     lesson = request.args.get('lesson')
     code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
     surveys[code] = [lesson, q, []]
+
+    # add code to database
+    if 'email' in session: # grab email from session
+        email = session['email']
+    table = dynamodb.Table('lessons')
+    feedback = []
+    table.put_item(
+        Item={
+            'email': email,
+            'code': code, # add the class name later 
+            'question': q,
+            'feedback': feedback
+        }
+    )
+
     return render_template('lesson.html', code=code, lessonName=lesson, question=q)
 
 # link to the code inputting page for students
@@ -228,6 +243,24 @@ def enter_code():
 def add_response():
     response = request.form['feedback']
     code = request.args.get('lessonCode')
+
+    # add response to the list attribute of the correct lesson
+    if 'email' in session: # grab email from session
+        email = session['email']
+    table = dynamodb.Table('lessons')
+    result = table.update_item(
+        Key={
+            'email': email,
+            'code': code
+        },
+        UpdateExpression="SET feedback = list_append(feedback, :i)",
+        ExpressionAttributeValues={
+            ':i': [response],
+        },
+        ReturnValues="UPDATED_NEW"
+    )
+
+    # --------------------------
     surveys[code][2].append(response)
     print(surveys)
     return render_template('submitted.html')
