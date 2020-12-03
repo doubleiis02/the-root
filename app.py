@@ -10,7 +10,7 @@ import boto3
 app = Flask(__name__)
 app.secret_key="super secret key"
 
-dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
+dynamodb = boto3.resource('dynamodb', aws_access_key_id="AWSKEY", aws_secret_access_key="AWSKEY", region_name='us-east-1')
 from boto3.dynamodb.conditions import Key, Attr
 
 
