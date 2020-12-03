@@ -5,65 +5,42 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     </head>
     <body class="App">
-
-        <!-- This header is the navbar that should be on every page -->
-        <header class='nav'>
-            <button class='nav-button'>
-                <svg width="27" height="22" viewBox="0 0 27 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.9167 22V14.5H16.0833V22H22.5417V12H26.4167L13.5 0.75L0.583332 12H4.45833V22H10.9167Z" fill="#878686"/></svg>
-            </button>
-            <button class='nav-button'>
-                <svg width="22" height="24" viewBox="0 0 22 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.7292 15.0833H14.7746L14.4362 14.7346C15.6204 13.2621 16.3333 11.3504 16.3333 9.27083C16.3333 4.63375 12.8171 0.875 8.47917 0.875C4.14125 0.875 0.625 4.63375 0.625 9.27083C0.625 13.9079 4.14125 17.6667 8.47917 17.6667C10.4246 17.6667 12.2129 16.9046 13.5904 15.6388L13.9167 16.0004V17.0208L19.9583 23.4662L21.7587 21.5417L15.7292 15.0833ZM8.47917 15.0833C5.47042 15.0833 3.04167 12.4871 3.04167 9.27083C3.04167 6.05458 5.47042 3.45833 8.47917 3.45833C11.4879 3.45833 13.9167 6.05458 13.9167 9.27083C13.9167 12.4871 11.4879 15.0833 8.47917 15.0833Z" fill="#878686"/></svg>
-            </button>
-            <button class='nav-button'>
-                <svg width="22" height="24" viewBox="0 0 22 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.1667 3.25V20.75H2.83333V3.25H19.1667ZM20.45 0.75H1.55C0.966667 0.75 0.5 1.25 0.5 1.875V22.125C0.5 22.625 0.966667 23.25 1.55 23.25H20.45C20.9167 23.25 21.5 22.625 21.5 22.125V1.875C21.5 1.25 20.9167 0.75 20.45 0.75ZM9.83333 5.75H16.8333V8.25H9.83333V5.75ZM9.83333 10.75H16.8333V13.25H9.83333V10.75ZM9.83333 15.75H16.8333V18.25H9.83333V15.75ZM5.16667 5.75H7.5V8.25H5.16667V5.75ZM5.16667 10.75H7.5V13.25H5.16667V10.75ZM5.16667 15.75H7.5V18.25H5.16667V15.75Z" fill="#878686"/></svg>
-
-            </button>
-            <button class='nav-button'>
-                <svg width="26" height="21" viewBox="0 0 26 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24.25 4.25001H21.75V13.625H5.5V15.7083C5.5 16.2813 6.0625 16.75 6.75 16.75H20.5L25.5 20.9167V5.29168C25.5 4.71876 24.9375 4.25001 24.25 4.25001ZM19.25 10.5V1.12501C19.25 0.552094 18.6875 0.0833435 18 0.0833435H1.75C1.0625 0.0833435 0.5 0.552094 0.5 1.12501V15.7083L5.5 11.5417H18C18.6875 11.5417 19.25 11.0729 19.25 10.5Z" fill="#878686"/></svg>
-            </button>
-        </header>
-
-        <!-- these ellipses are part of the background of every page (except login) -->
-        <svg class="circle-top" width="129" height="83" viewBox="0 0 129 83" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="64" cy="26.5" rx="66.5" ry="56.5" fill="#f7f581" fill-opacity="0.4"/></svg>
-        <svg class="circle-top" width="129" height="83" viewBox="0 0 129 83" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="10.5" cy="80.5" rx="66.5" ry="56.5" fill="#f7f581" fill-opacity="0.58"/></svg> 
-
-        <svg class="circle-bottom" width="129" height="83" viewBox="0 0 129 83" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="115" cy="0" rx="66.5" ry="56.5" fill="#f7f581" fill-opacity="0.58"/></svg>
-        <svg class="circle-bottom" width="129" height="83" viewBox="0 0 129 83" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="66" cy="55" rx="66.5" ry="56.5" fill="#f7f581" fill-opacity="0.4"/></svg>
+        {% include "nav.html" %}
+        {% include "circles.html" %}
 
         <!-- this div is the home page -->
-        <div class="homepage">
+        <div class="page">
             <div class="homepage-header">
                 <div class= "welcome">
                     <div>Welcome back,</div>
                     <div>{{  name  }}!</div>
                 </div>
                 <a href='/add_class_page'>
-                    <button type="button">Add new class</button>
+                    <button class="plus-button">+</button>
                 </a>
-                <!-- Button to add a new class 
-                <form action="{{ url_for('add_class') }}" id='class-name-form' method='post'>
-                    <input type='text' id='class-name-input' name='class-name-input' placeholder='New Class Name' class='class-name-form'>
-                    <input  class="add-class-button" type = "submit" value = "+" />
-                </form>-->
             </div>
             <div class="your-courses">Your Courses</div>
 
             <!-- These class icons should be rendered through a loop -->
             <div class="class-icon-container">
-
-              {% for _class in class_list %}
-            <a href="/about">
-                <div class="class-icon" style="background-color: {{  _class.bg  }}">
-                    <svg class="class-mover" width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                           <path d="M4 14C4 15.1 3.1 16 2 16C0.9 16 0 15.1 0 14C0 12.9 0.9 12 2 12C3.1 12 4 12.9 4 14ZM2 6C0.9 6 0 6.9 0 8C0 9.1 0.9 10 2 10C3.1 10 4 9.1 4 8C4 6.9 3.1 6 2 6ZM2 0C0.9 0 0 0.9 0 2C0 3.1 0.9 4 2 4C3.1 4 4 3.1 4 2C4 0.9 3.1 0 2 0ZM8 4C9.1 4 10 3.1 10 2C10 0.9 9.1 0 8 0C6.9 0 6 0.9 6 2C6 3.1 6.9 4 8 4ZM8 6C6.9 6 6 6.9 6 8C6 9.1 6.9 10 8 10C9.1 10 10 9.1 10 8C10 6.9 9.1 6 8 6ZM8 12C6.9 12 6 12.9 6 14C6 15.1 6.9 16 8 16C9.1 16 10 15.1 10 14C10 12.9 9.1 12 8 12Z" fill="white"/>
-                    </svg>
-                         <svg class="blob" width="120" height="128" viewBox="0 0 120 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g style="mix-blend-mode:screen"><path d="M112.822 109.93C112.822 142.135 77.6005 124.508 69.3407 96.2553C49.8566 29.609 -20.2357 43.7695 7.04347 8.88617C32.8869 -10.1832 59.1126 8.88619 91.0946 8.88619C123.076 8.88619 112.822 77.725 112.822 109.93Z" fill="{{  _class.blobfill  }}"/></g>
-                    </svg>
-                    <div class="class-name">{{  _class.name  }}</div>
-                </div>
-            </a>
-              {% endfor %}
+            {% if not class_list %}
+                <h1>You don't have any classes. Try to add some!</h1>
+            {% else %}
+                {% for _class in class_list %}
+                   <a href="{{ url_for('dashboard', className=_class.name, color=_class.bg) }}">
+                        <div class="class-icon" style="background-color: {{  _class.bg  }}">
+                            <svg class="class-mover" width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 14C4 15.1 3.1 16 2 16C0.9 16 0 15.1 0 14C0 12.9 0.9 12 2 12C3.1 12 4 12.9 4 14ZM2 6C0.9 6 0 6.9 0 8C0 9.1 0.9 10 2 10C3.1 10 4 9.1 4 8C4 6.9 3.1 6 2 6ZM2 0C0.9 0 0 0.9 0 2C0 3.1 0.9 4 2 4C3.1 4 4 3.1 4 2C4 0.9 3.1 0 2 0ZM8 4C9.1 4 10 3.1 10 2C10 0.9 9.1 0 8 0C6.9 0 6 0.9 6 2C6 3.1 6.9 4 8 4ZM8 6C6.9 6 6 6.9 6 8C6 9.1 6.9 10 8 10C9.1 10 10 9.1 10 8C10 6.9 9.1 6 8 6ZM8 12C6.9 12 6 12.9 6 14C6 15.1 6.9 16 8 16C9.1 16 10 15.1 10 14C10 12.9 9.1 12 8 12Z" fill="white"/>
+                            </svg>
+                            <svg class="blob" width="120" height="128" viewBox="0 0 120 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <path d="M112.822 109.93C112.822 142.135 77.6005 124.508 69.3407 96.2553C49.8566 29.609 -20.2357 43.7695 7.04347 8.88617C32.8869 -10.1832 59.1126 8.88619 91.0946 8.88619C123.076 8.88619 112.822 77.725 112.822 109.93Z" fill="{{  _class.blobfill  }}"/>
+                            </svg>
+                            <div class="class-name">{{  _class.name  }}</div>
+                        </div>
+                    </a>
+                {% endfor %}
+            {% endif %}
+            </div>
         </div>
     </body>
 </html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>{{ className }}</h1><br>
+        The code for this lesson survey is: <b>{{ code }}</b><br>
+        <a href="{{ url_for('goto_code_page') }}">link to survey</a><br>
+        <a><button>Send code to students</button></a>
+        <h2>Feedback:</h2>
+        Question: {{ question }}
+        
+    </body>
+</html>
