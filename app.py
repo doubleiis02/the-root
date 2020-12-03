@@ -10,7 +10,7 @@ import boto3
 app = Flask(__name__)
 app.secret_key="super secret key"
 
-dynamodb = boto3.resource('dynamodb', aws_access_key_id="AWSKEY", aws_secret_access_key="AWSKEY", region_name='us-east-1')
+dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
 from boto3.dynamodb.conditions import Key, Attr
 
 
@@ -121,6 +121,35 @@ def dashboard():
     color = request.args.get('color')
     return render_template('dashboard.html', className=className, color=color, name=name)
 
+""" #------------------ newly added: passing survey responses into aws comprehend
+	# getting all lesson code and feedbacks for a user
+    if 'email' in session:
+        email = session['email']
+    response = dynamodb.get_item(TableName='lessons', 
+        Key={
+            'email':email
+        }
+    )
+    # getting all feedbacks for one survey and pass into the nlp
+    for res in response: 
+        allfeedback_string = ""
+        allfeedback_list   = []
+        myitems  = res.items() 
+        mylist   = list(myitems)
+        code     = mylist[1][1]
+        feedback = mylist[2][1]
+        for ele in feedback:
+            myitems      = ele.items() 
+            mylist       = list(myitems)
+            eachfeedback = mylist[0][1]
+            allfeedback_string += eachfeedback
+            allfeedback_list.append(eachfeedback)
+        # now for each code, we have all its feedback, will pass into the nlp
+    print(allfeedback_list) """
+
+
+# 
+
 @app.route('/signup', methods=['POST'])
 def signup():
     if request.method == 'POST':
@@ -206,10 +235,10 @@ def add_survey():
 @app.route("/create_survey", methods=['GET', 'POST'])
 def create_survey():
     q = request.form['survey-question']
-    lesson = request.args.get('lesson')
+    lesson = request.form['survey-title']
+    #className = request.args.get('className')
     code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
     surveys[code] = [lesson, q, []]
-
     # add code to database
     if 'email' in session: # grab email from session
         email = session['email']

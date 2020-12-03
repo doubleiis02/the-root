@@ -11,9 +11,8 @@
         {% include "circles.html" %}
         <div class="page">
             <div class="homepage-header welcome long">
-                <div>Create New Survey for</div>
                 <div></div>Create New Survey for<br> {{ className }}</div>
-            <form action="{{ url_for('add_survey') }}" class="align-left" id='create-survey-form' method='post'>
+            <form action="{{ url_for('add_survey', className = className) }}" class="align-left" id='create-survey-form' method='post'>
                 <label for='survey-title'>Title of Survey:</label><br>
                 <input class="input" type='text' id='survey-title' name='survey-title' ><br>
                 <label for='survey-question'>Question 1:</label><br>
