@@ -1,5 +1,5 @@
 .ellipse {
-    position: fixed;
+    position: absolute; /* FIX THIS */
     z-index: 0;
     overflow: visible;
     margin-left: auto;
@@ -43,7 +43,7 @@
     font-size: 1.2rem;
     display: flex;
     flex-direction: column;
-    margin-top: 80px;
+    margin-top: 20px;
     margin-bottom: 30px;
     padding: 20px;
     border-radius: 25px;
@@ -75,4 +75,32 @@ input {
     background: black;
     color: white;
     padding: 150px;
+}
+
+.button-group {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 80px;
+}
+
+.green-button {
+    background-color: #9EC95D;
+    color: white;
+    font-size: 1rem;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: bold;
+    margin: 0px 20px;
+}
+.green-button:link {
+    text-decoration: none;
+}
+.green-button:visited {
+    text-decoration: none;
+}
+.green-button:hover {
+    box-shadow: 0px 0px 5px 1px rgb(196, 196, 196);
 }

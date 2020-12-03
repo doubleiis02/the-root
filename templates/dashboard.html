@@ -3,7 +3,8 @@
     <head>
         <link rel="stylesheet" href="/static/css/style.css">
         <link rel="stylesheet" href="/static/css/dashboard.css">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
     </head>
     <body class="App">
         {% include "nav.html" %}
@@ -20,6 +21,10 @@
                     <div>{{  name  }}'s</div>
                     <div class="bold large">{{ className }} Dashboard</div>
                 </div>
+            </div>
+            <div class="button-group">
+                <a href="{{ url_for('lessons') }}" class="green-button">View Past Surveys</a>
+                <a href="{{ url_for('add_survey', className=className) }}" class="green-button">Create New Survey</a>
             </div>
             <div class="suggested-actions">
                 <b class="suggestion">Suggested Actions</b>
