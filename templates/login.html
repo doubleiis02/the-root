@@ -2,22 +2,21 @@
 <html>
     <head>
         <link rel="stylesheet" href="/static/css/style.css">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/login.css">
     </head>
-    <body>
-        <p>LOG IN</p>
+    <body class="App">
+        <img class="logo" src="/static/img/logo.png"/>
+        <div class="the-root">The Root</div>
+        <div class="login-title">Welcome!</div>
         <p>{{  msg  }}</p>
         <form action="{{ url_for('check') }}" id='log-in' method='post'>
-            <label for="name-input">Name:</label>
-            <input type='text' id='name-input' name='name-input' placeholder='Input Name Here'>
+            <input class="input email" type="text" id="email-input" name="email-input" placeholder='Email' required>
             <br>
-            <label for="email-input">Email:</label>
-            <input type="text" id="email-input" name="email-input" placeholder='Input Email Here'>
+            <input class="input password" type="password" id="password-input" name="password-input" placeholder='Password' required>
             <br>
-            <label for="password-input">Password:</label>
-            <input type="password" id="password-input" name="password-input" placeholder='Input Password Here'>
-            <br>
-            <input type = "submit" value = "Log in!"/>
+            <input class="submit" type = "submit" value = "Log in!"/>
         </form>
     </body>
 </html>

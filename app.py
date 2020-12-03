@@ -199,9 +199,8 @@ def lessons():
 
 @app.route('/add_survey', methods = ['GET'])
 def add_survey():
-    lesson = request.args.get('lessonName')
-    
-    return render_template('createSurvey.html', lessonName=lesson)
+    className = request.args.get('className')
+    return render_template('createSurvey.html', className=className)
 
 # the user is at createSurvey.html and then submits a form -> moves to newly created lesson.html
 @app.route("/create_survey", methods=['GET', 'POST'])

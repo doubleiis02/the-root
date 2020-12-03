@@ -1,0 +1,22 @@
+.long {
+    width: 100%;
+    text-align: center;
+}
+
+.align-left {
+    text-align: left;
+    margin-top: 30px;
+}
+
+label {
+    font-weight: bold;
+    color: #878686;
+    font-size: 1.2rem;
+}
+
+.input {
+    width: 400px;
+    height: 200px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
