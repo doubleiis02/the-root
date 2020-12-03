@@ -7,7 +7,7 @@ import random
 
 # aws attempts
 
-comprehend = boto3.client('comprehend', aws_access_key_id="AKIAUGHVLYMDIC34LDXV", aws_secret_access_key="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", region_name='us-east-1')
+comprehend = boto3.client('comprehend', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
 text = "If you like to have a custom sentiment analyzer for your domain, it is possible to train a classifier using flair using your dataset. The drawback of using a flair pre-trained model for sentiment analysis is that it is trained on IMDB data and this model might not generalize well on data from other domains like twitter."
 text2 = "I am confused about the pythagorean theorem. I don't understand the "
 
