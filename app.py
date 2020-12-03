@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from twilio import twiml
 from twilio.twiml.messaging_response import Message, MessagingResponse
 from twilio.rest import Client
@@ -10,12 +10,9 @@ import boto3
 app = Flask(__name__)
 app.secret_key="super secret key"
 
-dynamodb = boto3.resource('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
+dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
 from boto3.dynamodb.conditions import Key, Attr
 
-
-
-current_classes = ["English 1B", "English 1C", "English 1D", "English 1E"]
 
 class Classes:
     def __init__(self, name, bg, blobfill):
@@ -23,8 +20,22 @@ class Classes:
         self.bg = bg
         self.blobfill = blobfill
 
-class_list = [Classes('English 1A', '#67d7ce', '#b5faf6'), Classes('English 1B', '#91cc49', '#d2f68b'),
-                Classes('English 1C', '#2cb2d6', '#71e9fa'), Classes('English 1D', '#7cb36e', '#b8ebac')]
+#class_list = [Classes('English 1A', '#67d7ce', '#b5faf6'), Classes('English 1B', '#91cc49', '#d2f68b'),
+#                Classes('English 1C', '#2cb2d6', '#71e9fa'), Classes('English 1D', '#7cb36e', '#b8ebac')]
+# Getting email of the teacher
+""" if 'email' in session:
+    email = session['email']
+
+class_table = dynamodb.Table('classes')
+response = class_table.query(
+        KeyConditionExpression=Key('email').eq(email)
+)
+classes = response['Items']
+class_list = []
+for _classes in classes:
+    class_list.append(Classes(_classes['class'], _classes['primary_color'], _classes['secondary_color'])) """
+
+
 
 class Lesson:
     def __init__(self, name, className, bg, blobfill, code, questions, responses):
@@ -41,14 +52,31 @@ lesson_list = [
     Lesson('Week 1', 'English 1B', '#91cc49', '#d2f68b', 'fghijk', ["How do you feel about the class?", "How can the class be improved?"], [["It's alright", "idk"], ["Great!", "less homework"]])
 ]
 
+lesson_list = [] # Create empty lesson list
+
+class_list = [] # Create empty class list
+
+
 @app.route('/')
 def signin():
     return render_template('signup.html')
 
 @app.route('/home')
 def index():
-    return render_template('index.html', class_list=class_list)
+    if 'name' in session:
+        name = session['name']
+    if 'email' in session:
+        email = session['email']
+    return render_template('index.html', class_list=class_list, name=name)
 
+""" class_table = dynamodb.Table('classes')
+    response = class_table.query(
+           KeyConditionExpression=Key('email').eq(email)
+    )
+    classes = response['Items']
+    for _classes in classes:
+        class_list.append(Classes(_classes['class'], _classes['primary_color'], _classes['secondary_color'])) """
+    
 if __name__== '__main__':
     app.run(debug=True)
 
@@ -64,18 +92,34 @@ def add_class_page():
 # adds a new class to the list of classes in index.html
 @app.route('/add_class', methods = ['POST', 'GET'])
 def add_class():
+    # getting data from form
     name = request.form['class-name-input']
     primary_color = request.form['pri-class-color-input']
     secondary_color = request.form['sec-class-color-input']
+
+    # insertion into table
+    table = dynamodb.Table('classes')
+    if 'email' in session:
+        email = session['email']
+    table.put_item(
+        Item={
+            'class': name,
+            'primary_color': primary_color,
+            'secondary_color': secondary_color,
+            'email': email
+        }
+    )
     class_list.append(Classes(name, primary_color, secondary_color)) 
     return redirect(url_for('index', class_list=class_list))
 
 # user clicks on a class icon in index.html -> moves to that class's dashboard
 @app.route('/dashboard')
 def dashboard():
+    if 'name' in session:
+        name = session['name']
     className = request.args.get('className')
     color = request.args.get('color')
-    return render_template('dashboard.html', className=className, color=color)
+    return render_template('dashboard.html', className=className, color=color, name=name)
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -99,6 +143,8 @@ def signup():
 
 @app.route('/login')
 def login():    
+    # Reset class login to empty so that its not stored if you log out and then login
+    #class_list = []
     return render_template('login.html')
 
 
@@ -120,10 +166,27 @@ def check():
             msg = "Login Unsuccessful. Double check your information"
             return render_template("login.html", msg = msg)
         name = items[0]['name']
+        session['name'] = name
+        session['email'] = email
         print(items[0]['password'])
         if password == items[0]['password']:
-            return render_template("index.html", name = name, current_classes=current_classes, class_list=class_list)
+            # Reset class list so that if you login/logout, the information doesn't spill over
+            #class_list = []
+            # Get classes for that teacher
+            class_table = dynamodb.Table('classes')
+            response = class_table.query(
+                KeyConditionExpression=Key('email').eq(email)
+            )
+            classes = response['Items']
+            if not class_list:
+                for _classes in classes:
+                    class_list.append(Classes(_classes['class'], _classes['primary_color'], _classes['secondary_color']))
+            # Return the home page with the teacher name, and classes
+            return render_template("index.html", name = name, class_list=class_list)
     return render_template("login.html")
+
+# ---------------------------------------------------------------------
+
 
 # a dictionary that keeps track of every survey ever created
 # key: the code
@@ -137,6 +200,7 @@ def lessons():
 @app.route('/add_survey', methods = ['GET'])
 def add_survey():
     lesson = request.args.get('lessonName')
+    
     return render_template('createSurvey.html', lessonName=lesson)
 
 # the user is at createSurvey.html and then submits a form -> moves to newly created lesson.html
