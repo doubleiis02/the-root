@@ -10,7 +10,7 @@ import boto3
 app = Flask(__name__)
 app.secret_key="super secret key"
 
-dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
+dynamodb = boto3.resource('dynamodb', aws_access_key_id="AWSKEY", aws_secret_access_key="AWSKEY", region_name='us-east-1')
 from boto3.dynamodb.conditions import Key, Attr
 
 
@@ -199,9 +199,8 @@ def lessons():
 
 @app.route('/add_survey', methods = ['GET'])
 def add_survey():
-    lesson = request.args.get('lessonName')
-    
-    return render_template('createSurvey.html', lessonName=lesson)
+    className = request.args.get('className')
+    return render_template('createSurvey.html', className=className)
 
 # the user is at createSurvey.html and then submits a form -> moves to newly created lesson.html
 @app.route("/create_survey", methods=['GET', 'POST'])
