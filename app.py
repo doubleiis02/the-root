@@ -10,11 +10,8 @@ import boto3
 app = Flask(__name__)
 app.secret_key="super secret key"
 
-dynamodb = boto3.resource('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
-<<<<<<< HEAD
-client = boto3.client('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
-=======
->>>>>>> main
+dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
+client = boto3.client('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
 from boto3.dynamodb.conditions import Key, Attr
 
 
@@ -261,11 +258,7 @@ def check():
 def lessons():
     return render_template('lessonList.html', lesson_list=lesson_list)
 
-<<<<<<< HEAD
 @app.route('/add_survey', methods = ['GET', 'POST'])
-=======
-@app.route('/add_survey', methods = ['GET',  'POST'])
->>>>>>> main
 def add_survey():
     className = request.args.get('className')
     return render_template('createSurvey.html', className=className)
@@ -277,11 +270,6 @@ def create_survey():
     lesson = request.form['survey-title']
     className = request.args.get('className')
     code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
-<<<<<<< HEAD
-=======
-    surveys[code] = [lesson, q, []]
-
->>>>>>> main
     # add code to database
     if 'email' in session: # grab email from session
         email = session['email']
@@ -292,14 +280,13 @@ def create_survey():
             'email': email,
             'code': code, # add the class name later 
             'question': q,
-<<<<<<< HEAD
             'feedback': feedback,
             'class': className,
             'lesson_name': lesson,
             'class_name': className
         }
     )
-
+    lesson_list.append(Lesson(lesson, className, "#67d7ce","#b5faf6", code, q, feedback))
     table = dynamodb.Table('classes')
     result = table.update_item(
         Key={
@@ -312,15 +299,8 @@ def create_survey():
         },
         ReturnValues="UPDATED_NEW"
     )
-
+    
     return render_template('lesson.html', code=code, lessonName=lesson, question=q)
-=======
-            'feedback': feedback
-        }
-    )
-
-    return render_template('lesson.html', code=code, lessonName=lesson, question=q, className=className, feedback=feedback)
->>>>>>> main
 
 # link to the code inputting page for students
 @app.route("/goto_code_page")
@@ -368,13 +348,8 @@ def add_response():
     )
 
     # --------------------------
-<<<<<<< HEAD
     #surveys[code][2].append(response)
     #print(surveys)
-=======
-    surveys[code][2].append(response)
-    print(surveys)
->>>>>>> main
     return render_template('submitted.html')
     
 
