@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.secret_key="super secret key"
 
 dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
+client = boto3.client('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
 from boto3.dynamodb.conditions import Key, Attr
 
 
@@ -119,19 +120,36 @@ def dashboard():
         name = session['name']
     className = request.args.get('className')
     color = request.args.get('color')
-    return render_template('dashboard.html', className=className, color=color, name=name)
-
-""" #------------------ newly added: passing survey responses into aws comprehend
+    #------------------ newly added: passing survey responses into aws comprehend
 	# getting all lesson code and feedbacks for a user
     if 'email' in session:
         email = session['email']
-    response = dynamodb.get_item(TableName='lessons', 
-        Key={
-            'email':email
-        }
+    return render_template('dashboard.html', className=className, color=color, name=name)
+
+    #client = boto3.client('dynamodb')
+
+"""     table = dynamodb.Table('lessons')
+    response = table.query(
+        KeyConditionExpression=Key('email').eq('email'), #& Key('class').eq(className),
+        ScanIndexForward=True,
+        AttributesToGet=[
+            'feedback'
+        ]
     )
+    print(response) """
+"""     response = client.get_item(TableName='lessons', 
+        Key = { 
+            'string': { 
+                'S' : email 
+            } 
+        },
+        AttributesToGet=[
+            'feedback'
+        ]
+    ) """
+
     # getting all feedbacks for one survey and pass into the nlp
-    for res in response: 
+"""     for res in response: 
         allfeedback_string = ""
         allfeedback_list   = []
         myitems  = res.items() 
@@ -143,9 +161,11 @@ def dashboard():
             mylist       = list(myitems)
             eachfeedback = mylist[0][1]
             allfeedback_string += eachfeedback
-            allfeedback_list.append(eachfeedback)
+            allfeedback_list.append(eachfeedback) """
         # now for each code, we have all its feedback, will pass into the nlp
-    print(allfeedback_list) """
+    #print(allfeedback_list) 
+
+
 
 
 # 
@@ -226,7 +246,7 @@ surveys = {}
 def lessons():
     return render_template('lessonList.html', lesson_list=lesson_list)
 
-@app.route('/add_survey', methods = ['GET'])
+@app.route('/add_survey', methods = ['GET', 'POST'])
 def add_survey():
     className = request.args.get('className')
     return render_template('createSurvey.html', className=className)
@@ -236,6 +256,7 @@ def add_survey():
 def create_survey():
     q = request.form['survey-question']
     lesson = request.form['survey-title']
+    className = request.args.get('className')
     #className = request.args.get('className')
     code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
     surveys[code] = [lesson, q, []]
@@ -249,8 +270,22 @@ def create_survey():
             'email': email,
             'code': code, # add the class name later 
             'question': q,
-            'feedback': feedback
+            'feedback': feedback,
+            'class': className
         }
+    )
+
+    table = dynamodb.Table('classes')
+    result = table.update_item(
+        Key={
+            'email': email,
+            'class': className
+        },
+        UpdateExpression="SET latest_code = :i",
+        ExpressionAttributeValues={
+            ':i': [code],
+        },
+        ReturnValues="UPDATED_NEW"
     )
 
     return render_template('lesson.html', code=code, lessonName=lesson, question=q)
