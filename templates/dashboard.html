@@ -27,11 +27,15 @@
                 <a href="{{ url_for('add_survey', className=className) }}" class="green-button">Create New Survey</a>
             </div>
             <div class="suggested-actions">
+                {% if latestcode == "NULL" %}
+                    <p>You don't have any surveys! Try adding one!</p> <!-- Remove afterwards, just for testing purposes -->
+                {% else %}
                 <b class="suggestion">Suggested Actions</b>
-                <div class="suggestion"><input type=checkbox id="s1"><label for="s1"><b>Great Gatsby: </b></label>Explain New vs. Old Money</div>
-                <div class="suggestion"><input type=checkbox value="s2"><label for="s2"><b>Prepositions: </b></label>Students would like to see more sentence use examples</div>
-                <div class="suggestion"><input type=checkbox value="s3"><label for="s3"><b>Active vs. Passive Voice: </b></label>Another group exercise might help</div>
-            </div>
+                    <div class="suggestion"><input type=checkbox id="s1"><label for="s1"><b>Great Gatsby: </b></label>Explain New vs. Old Money</div>
+                    <div class="suggestion"><input type=checkbox value="s2"><label for="s2"><b>Prepositions: </b></label>Students would like to see more sentence use examples</div>
+                    <div class="suggestion"><input type=checkbox value="s3"><label for="s3"><b>Active vs. Passive Voice: </b></label>Another group exercise might help</div>
+                {% endif %}
+                </div>
             <div class="welcome left">
                 <b>Student Sentiment</b>
                 <div class="gray-small">Week of December 6</div>

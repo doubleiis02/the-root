@@ -14,6 +14,9 @@
                 <div class= "welcome">Your Lessons</div>
             </div>
             <div class="class-icon-container">
+            {% if not lesson_list %}
+            <h3>You don't have any lessons! Try adding some from your class dashboard!</h3>
+            {% else %}
             {% for _lesson in lesson_list %}
                 <a href="{{ url_for('dashboard', name=_lesson.name, bg=_lesson.bg, blobfill=_lesson.blobfill) }}">
                     <div class="class-icon short" style="background-color: {{  _lesson.bg  }}">
@@ -28,6 +31,7 @@
                     </div>
                 </a>
             {% endfor %}
+            {% endif %}
             </div>
         </div>
     </body>

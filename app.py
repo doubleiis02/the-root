@@ -10,8 +10,8 @@ import boto3
 app = Flask(__name__)
 app.secret_key="super secret key"
 
-dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
-client = boto3.client('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
+dynamodb = boto3.resource('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
+client = boto3.client('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
 from boto3.dynamodb.conditions import Key, Attr
 
 
@@ -124,29 +124,38 @@ def dashboard():
 	# getting all lesson code and feedbacks for a user
     if 'email' in session:
         email = session['email']
-    return render_template('dashboard.html', className=className, color=color, name=name)
 
-    #client = boto3.client('dynamodb')
-
-"""     table = dynamodb.Table('lessons')
-    response = table.query(
-        KeyConditionExpression=Key('email').eq('email'), #& Key('class').eq(className),
-        ScanIndexForward=True,
-        AttributesToGet=[
-            'feedback'
-        ]
+    # Get the latest code from the class code, and then pull that data for the feedback displayed
+    table = dynamodb.Table('classes')
+    response = table.get_item(
+        Key={
+            'email': email,
+            'class': className
+        }
     )
-    print(response) """
-"""     response = client.get_item(TableName='lessons', 
-        Key = { 
-            'string': { 
-                'S' : email 
-            } 
-        },
-        AttributesToGet=[
-            'feedback'
-        ]
-    ) """
+    print(response)
+    items = response['Item']
+    print(items)
+    if 'latest_code' in items:        
+        latest_code = items['latest_code'][0]
+        print(latest_code)
+        # Now that we have the latest code, we can pass the feedback into the algorithm
+        # get the feedback given the latest code
+        table = dynamodb.Table('lessons')
+        response = table.get_item(
+        Key={
+            'email': email,
+            'code': latest_code
+        }
+        ) 
+        items = response['Item']
+        feedback = items['feedback'] # this is the feedback of the latest code. Will throw this into NLP algorithm
+        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code)
+    else:
+        # Probably display error message if code is null
+        latest_code = "NULL"
+        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code)
+
 
     # getting all feedbacks for one survey and pass into the nlp
 """     for res in response: 
@@ -164,11 +173,6 @@ def dashboard():
             allfeedback_list.append(eachfeedback) """
         # now for each code, we have all its feedback, will pass into the nlp
     #print(allfeedback_list) 
-
-
-
-
-# 
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -193,7 +197,6 @@ def signup():
 @app.route('/login')
 def login():    
     # Reset class login to empty so that its not stored if you log out and then login
-    #class_list = []
     return render_template('login.html')
 
 
@@ -219,8 +222,6 @@ def check():
         session['email'] = email
         print(items[0]['password'])
         if password == items[0]['password']:
-            # Reset class list so that if you login/logout, the information doesn't spill over
-            #class_list = []
             # Get classes for that teacher
             class_table = dynamodb.Table('classes')
             response = class_table.query(
@@ -230,6 +231,18 @@ def check():
             if not class_list:
                 for _classes in classes:
                     class_list.append(Classes(_classes['class'], _classes['primary_color'], _classes['secondary_color']))
+            # Get lessons for that teacher
+            lesson_table = dynamodb.Table('lessons')
+            response = lesson_table.query(
+                KeyConditionExpression=Key('email').eq(email)
+            )
+            lessons = response['Items']
+            print(lessons)
+            if lessons: # check if list is empty, skip this if it is
+                if not lesson_list:
+                    for _lessons in lessons:
+                        lesson_list.append(Lesson(_lessons['lesson_name'], _lessons['class_name'], "#67d7ce","#b5faf6",_lessons['code'],_lessons['question'], _lessons['feedback']))
+            
             # Return the home page with the teacher name, and classes
             return render_template("index.html", name = name, class_list=class_list)
     return render_template("login.html")
@@ -240,7 +253,6 @@ def check():
 # a dictionary that keeps track of every survey ever created
 # key: the code
 # value: a list of size 3, index 0 = the lesson name, index 1 = the survey question, and index 2 = list of student responses
-surveys = {}
 
 @app.route('/lessons')
 def lessons():
@@ -257,9 +269,7 @@ def create_survey():
     q = request.form['survey-question']
     lesson = request.form['survey-title']
     className = request.args.get('className')
-    #className = request.args.get('className')
     code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
-    surveys[code] = [lesson, q, []]
     # add code to database
     if 'email' in session: # grab email from session
         email = session['email']
@@ -271,7 +281,9 @@ def create_survey():
             'code': code, # add the class name later 
             'question': q,
             'feedback': feedback,
-            'class': className
+            'class': className,
+            'lesson_name': lesson,
+            'class_name': className
         }
     )
 
@@ -299,7 +311,19 @@ def goto_code_page():
 @app.route("/enter_code", methods=['GET', 'POST'])
 def enter_code():
     code = request.form['code']
-    return render_template('survey.html', code=code, lessonName=surveys[code][0], question=surveys[code][1])
+    # So the code is from the form, but the lesson name and the question should be from the database
+    # Get lessonName and question from database
+    table = dynamodb.Table('lessons')
+    response = table.scan(
+        FilterExpression=Attr('code').eq(code)
+    ) 
+    items = response['Items']
+    lessonName = items[0]['lesson_name']
+    question = items[0]['question']
+    #print(items)
+    #print(lessonName)
+    #print(question)
+    return render_template('survey.html', code=code, lessonName=lessonName, question=question)
 
 # student submits their response in survey.html -> moves to submitted.html
 @app.route("/add_response", methods=['GET', 'POST'])
@@ -324,8 +348,8 @@ def add_response():
     )
 
     # --------------------------
-    surveys[code][2].append(response)
-    print(surveys)
+    #surveys[code][2].append(response)
+    #print(surveys)
     return render_template('submitted.html')
     
 
