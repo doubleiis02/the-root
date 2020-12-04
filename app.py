@@ -10,7 +10,7 @@ import boto3
 app = Flask(__name__)
 app.secret_key="super secret key"
 
-dynamodb = boto3.resource('dynamodb', aws_access_key_id="AWSKEY", aws_secret_access_key="AWSKEY", region_name='us-east-1')
+dynamodb = boto3.resource('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
 from boto3.dynamodb.conditions import Key, Attr
 
 
@@ -197,7 +197,7 @@ surveys = {}
 def lessons():
     return render_template('lessonList.html', lesson_list=lesson_list)
 
-@app.route('/add_survey', methods = ['GET'])
+@app.route('/add_survey', methods = ['GET',  'POST'])
 def add_survey():
     className = request.args.get('className')
     return render_template('createSurvey.html', className=className)
@@ -206,7 +206,8 @@ def add_survey():
 @app.route("/create_survey", methods=['GET', 'POST'])
 def create_survey():
     q = request.form['survey-question']
-    lesson = request.args.get('lesson')
+    lesson = request.form['survey-title']
+    className = request.args.get('className')
     code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
     surveys[code] = [lesson, q, []]
 
@@ -224,7 +225,7 @@ def create_survey():
         }
     )
 
-    return render_template('lesson.html', code=code, lessonName=lesson, question=q)
+    return render_template('lesson.html', code=code, lessonName=lesson, question=q, className=className, feedback=feedback)
 
 # link to the code inputting page for students
 @app.route("/goto_code_page")
