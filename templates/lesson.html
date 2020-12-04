@@ -1,15 +1,46 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="stylesheet" href="/static/css/dashboard.css">
+        <link rel="stylesheet" href="/static/css/lesson.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
     </head>
-    <body>
-        <h1>{{ className }}</h1><br>
-        The code for this lesson survey is: <b>{{ code }}</b><br>
-        <a href="{{ url_for('goto_code_page') }}">link to survey</a><br>
-        <a><button>Send code to students</button></a>
-        <h2>Feedback:</h2>
-        Question: {{ question }}
-        
+    <body class="App">
+        {% include "nav.html" %}
+        {% include "circles.html" %}
+        <div class="page">
+            <div class="header">
+                <div class="title">
+                    <div>{{ lessonName }}</div>
+                    <div class="survey-for">Survey for {{ className }} </div>
+                </div>
+            </div>
+            {% if feedback == [] %}
+                <div class="subtitle">Success!</div>
+                <div class="message">Your survey has been created and is<br>ready to be sent to students.</div>
+                <img src="/static/img/success.png"/>
+            {% endif %}
+            <div class="subtitle">Your Survey Code:</div>
+            <div class="code">{{ code }}</div>
+            <a class="link" href="/goto_code_page">link to survey</a>
+            {% if feedback != [] %}
+                <div class="subtitle">Student Feedback</div>
+
+                <!-- THE PART BELOW NEEDS TO BE STYLED. WORK ON IT AFTER YOU CAN VIEW LESSONS LIST-->
+
+                <div>Question 1: {{ question }}</div>
+                <div>
+                    {% for f in feedback %}
+                        <div>{{ f }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="buttons">
+                <a href="{{ url_for('lessons') }}" class="back-button">Back to Lessons</a>
+                <a href="" class="green-button">Send to Students</a>
+            </div>
+        </div>
     </body>
 </html>
