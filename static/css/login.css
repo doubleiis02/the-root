@@ -29,6 +29,9 @@ p {
     font-size: 1rem;
     width: 300px;
 }
+input:focus {
+    outline: none;
+}
 
 ::placehodler {
     opacity: 0.35;
