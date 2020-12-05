@@ -9,7 +9,7 @@ from collections import Counter
 # Setting up test data and comprehend client
 comprehend = boto3.client('comprehend', 
                        aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
-                       
+
 text = "If you like to have a custom sentiment analyzer for your domain, it is possible to train a classifier using flair using your dataset. The drawback of using a flair pre-trained model for sentiment analysis is that it is trained on IMDB data and this model might not generalize well on data from other domains like twitter."
 text2 = "I am confused about the pythagorean theorem. I don't understand the "
 responses = ["I don\'t understand the pythagorean theorem.",
@@ -66,8 +66,8 @@ def getRecommendation(feedback):
     # Identify and sort by most repeated key phrases in student feedback
     counts = Counter(neg_kp)
     repeated_kp = counts.most_common()
-    print(repeated_kp)
-    print(len(repeated_kp))
+    #print(repeated_kp)
+    #print(len(repeated_kp))
     # Hard coded random templates for recommendations
     templates = ['Review ',
                  'Consider focusing on ',
