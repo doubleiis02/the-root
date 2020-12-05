@@ -8,8 +8,8 @@ from collections import Counter
 
 # Setting up test data and comprehend client
 comprehend = boto3.client('comprehend', 
-                        aws_access_key_id="AKIAQMIVM4QIASTAN2G4", 
-                        aws_secret_access_key="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", 
+                        aws_access_key_id="key", 
+                        aws_secret_access_key="key", 
                         region_name='us-east-1')
 text = "If you like to have a custom sentiment analyzer for your domain, it is possible to train a classifier using flair using your dataset. The drawback of using a flair pre-trained model for sentiment analysis is that it is trained on IMDB data and this model might not generalize well on data from other domains like twitter."
 text2 = "I am confused about the pythagorean theorem. I don't understand the "
