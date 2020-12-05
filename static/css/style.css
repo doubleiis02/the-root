@@ -48,6 +48,11 @@ a:visited {
     background: #dadada;
 }
 
+.no-nav {
+    position: fixed;
+    top: 0;
+}
+
 .circle-top {
     position: fixed;
     left: 0;
@@ -219,12 +224,6 @@ a:visited {
 
 /* lessonList.html */
 
-.short {
-    height: 150px;
-    width: 150px;
-    margin: 12px 5px 12px 5px;
-}
-
 .lesson-class-name {
     position: relative;
     left: -10px;
@@ -238,4 +237,30 @@ a:visited {
     left: -10px;
     top: -65px;
     z-index: 2;
+}
+
+/* code.html */
+
+.code-input {
+    margin: 20px;
+    font-size: 1.3rem;
+}
+
+.code:focus {
+    outline: none;
+}
+
+.no-border {
+    border: none;
+}
+
+/* submitted.html */
+
+.abs-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }

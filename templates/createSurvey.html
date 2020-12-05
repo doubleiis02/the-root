@@ -17,9 +17,9 @@
             </div>
             <form action="{{ url_for('create_survey', className=className) }}" class="align-left" id='create-survey-form' method='post'>
                 <label for='survey-title'> Title of Survey:</label><br>
-                <textarea class="lessonName" id='survey-title' name='survey-title' ></textarea><br>
+                <textarea class="lessonName" id='survey-title' name='survey-title' required ></textarea><br>
                 <label for='survey-question'> Question 1:</label><br>
-                <textarea id='survey-question' name='survey-question' ></textarea><br>
+                <textarea id='survey-question' name='survey-question' required ></textarea><br>
                 <input class="green-button create" type = "submit" value = "Create Survey" />
             </form>
         </div>

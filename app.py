@@ -10,8 +10,8 @@ import boto3
 app = Flask(__name__)
 app.secret_key="super secret key"
 
-dynamodb = boto3.resource('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
-client = boto3.client('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
+dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
+client = boto3.client('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
 from boto3.dynamodb.conditions import Key, Attr
 
 
@@ -133,12 +133,9 @@ def dashboard():
             'class': className
         }
     )
-    print(response)
     items = response['Item']
-    print(items)
     if 'latest_code' in items:        
         latest_code = items['latest_code'][0]
-        print(latest_code)
         # Now that we have the latest code, we can pass the feedback into the algorithm
         # get the feedback given the latest code
         table = dynamodb.Table('lessons')
@@ -150,11 +147,27 @@ def dashboard():
         ) 
         items = response['Item']
         feedback = items['feedback'] # this is the feedback of the latest code. Will throw this into NLP algorithm
-        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code)
+
+        sentiment = []
+        for f in feedback:
+            sentiment.append(f[1])
+
+        completely, mostly, slightly, dont = 0, 0, 0, 0
+        for s in sentiment:
+            if s == 'Completely understand':
+                completely += 1
+            if s == 'Mostly understand':
+                mostly += 1
+            if s == 'Slightly understand':
+                slightly += 1
+            if s == "Don't understand":
+                dont += 1
+        data = [completely, mostly, slightly, dont]
+        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code, chartData=data)
     else:
         # Probably display error message if code is null
         latest_code = "NULL"
-        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code)
+        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code, data=[])
 
 
     # getting all feedbacks for one survey and pass into the nlp
@@ -258,6 +271,34 @@ def check():
 def lessons():
     return render_template('lessonList.html', lesson_list=lesson_list)
 
+@app.route('/lessonPage', methods= ['GET'])
+def lessonPage():
+    
+    # WE NEED TO GET LESSON INFO FROM DYNAMODB, NOT FROM ARGUMENTS PASSED IN FROM create_survey()
+    code = request.args.get('code')
+    lesson = request.args.get('lessonName')
+    q = request.args.get('question')
+    className = request.args.get('className')
+    # feedback = request.args.get('feedback')
+
+    if 'email' in session: # grab email from session
+        email = session['email']
+
+    table = dynamodb.Table('lessons')
+    response = table.get_item(
+        Key={
+            'email': email,
+            'code': code
+        }
+    ) 
+    items = response['Item']
+    feedback = items['feedback']
+
+    print(feedback)
+
+    
+    return render_template('lesson.html', code=code, lessonName=lesson, question=q, className=className, feedback=feedback)
+
 @app.route('/add_survey', methods = ['GET', 'POST'])
 def add_survey():
     className = request.args.get('className')
@@ -299,8 +340,7 @@ def create_survey():
         },
         ReturnValues="UPDATED_NEW"
     )
-    
-    return render_template('lesson.html', code=code, lessonName=lesson, question=q)
+    return redirect(url_for('lessonPage', code=code, lessonName=lesson, question=q, className=className, feedback=feedback))
 
 # link to the code inputting page for students
 @app.route("/goto_code_page")
@@ -328,7 +368,7 @@ def enter_code():
 # student submits their response in survey.html -> moves to submitted.html
 @app.route("/add_response", methods=['GET', 'POST'])
 def add_response():
-    response = request.form['feedback']
+    response = [request.form['feedback'], request.form['sentiment']]
     code = request.args.get('lessonCode')
 
     # add response to the list attribute of the correct lesson

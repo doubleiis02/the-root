@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="stylesheet" href="/static/css/lesson.css">
+        <link rel="stylesheet" href="/static/css/dashboard.css">
+        <link rel="stylesheet" href="/static/css/login.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
     </head>
-    <body>
-        <p>Hi there!</p>
-        <form action="{{ url_for('enter_code') }}" id='enter_code' method='post'>
-            <label for='code'>Please enter your class code:</label><br>
-            <input type='text' id='code' name='code' />
-            <input class="" type = "submit" value = "Sumbit" />
-        </form>
+    <body class="App">
+        <div class="no-nav">{% include "circles.html" %}</div>
+        <div class=page>
+            <img class="logo" src="/static/img/logo.png"/>
+            <div class="the-root">The Root</div>
+            <img src="/static/img/hello.png" />
+            <form class='code-input' action="{{ url_for('enter_code') }}" id='enter_code' method='post'>
+                <label for='code'>Please enter your class code:</label><br>
+                <input class='code' type='text' id='code' name='code' required /><br>
+                <input class="green-button no-border" type = "submit" value = "Sumbit" />
+            </form>
+        </div>
     </body>
 </html>
