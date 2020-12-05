@@ -12,8 +12,8 @@ import NLP.nlp_algorithms as nlp
 app = Flask(__name__)
 app.secret_key="super secret key"
 
-dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
-client = boto3.client('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
+dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QICTEYVVMV", aws_secret_access_key="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", region_name='us-east-1')
+client = boto3.client('dynamodb', aws_access_key_id="AKIAQMIVM4QICTEYVVMV", aws_secret_access_key="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", region_name='us-east-1')
 from boto3.dynamodb.conditions import Key, Attr
 
 
@@ -127,6 +127,7 @@ def dashboard():
         feedback = items['feedback'] # this is the feedback of the latest code. Will throw this into NLP algorithm
 
         sentiment = []
+        recommend=[]
         for f in feedback:
             sentiment.append(f[1])
 
@@ -141,42 +142,33 @@ def dashboard():
             if s == "Don't understand":
                 dont += 1
         data = [completely, mostly, slightly, dont]
+        print(data)
+        # remove all sentiment from feedback being passed into NLP algorithm
+        # ===========================================================================
+        feedback_no_sent = []
+        for f in feedback:
+            feedback_no_sent.append(f[0])
+        #feedback = feedback_no_sent
+        # ===========================================================================
         
         # make sure the feedback list is not empty
         if feedback:
             # make sure the list of negative feedback is not empty
             neg_feedback = []
-            for i in feedback:
+            for i in feedback_no_sent: # changed to feedback_no_sent to remove the sentiment strings
                 if nlp.feedbackSent(i) == -1:
                     neg_feedback.append(i)
             if neg_feedback:
-                recommend = nlp.getRecommendation(feedback)
+                recommend = nlp.getRecommendation(feedback_no_sent) # changed to feedback_no_sent to remove the sentiment strings
                 print(feedback)
                 print(recommend)
     
-        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code, chartData=data)
+        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code, chartData=data, recommendations=recommend)
     else:
         # Probably display error message if code is null
         latest_code = "NULL"
-        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code, chartData=[])
-
-
-    # getting all feedbacks for one survey and pass into the nlp
-"""     for res in response: 
-        allfeedback_string = ""
-        allfeedback_list   = []
-        myitems  = res.items() 
-        mylist   = list(myitems)
-        code     = mylist[1][1]
-        feedback = mylist[2][1]
-        for ele in feedback:
-            myitems      = ele.items() 
-            mylist       = list(myitems)
-            eachfeedback = mylist[0][1]
-            allfeedback_string += eachfeedback
-            allfeedback_list.append(eachfeedback) """
-        # now for each code, we have all its feedback, will pass into the nlp
-    #print(allfeedback_list) 
+        recommend=[]
+        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code, chartData=[], recommendations=recommend)
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -245,7 +237,7 @@ def check():
             if lessons: # check if list is empty, skip this if it is
                 if not lesson_list:
                     for _lessons in lessons:
-                        lesson_list.append(Lesson(_lessons['lesson_name'], _lessons['class_name'], "#67d7ce","#b5faf6",_lessons['code'],_lessons['question'], _lessons['feedback']))
+                        lesson_list.append(Lesson(_lessons['lesson_name'], _lessons['class_name'], _lessons['primary_color'],_lessons['secondary_color'],_lessons['code'],_lessons['question'], _lessons['feedback']))
             
             # Return the home page with the teacher name, and classes
             return render_template("index.html", name = name, class_list=class_list)
@@ -305,6 +297,20 @@ def create_survey():
     # add code to database
     if 'email' in session: # grab email from session
         email = session['email']
+    
+    # getting colors from class
+    table = dynamodb.Table('classes')
+    response = table.get_item(
+        Key={
+            'email': email,
+            'class': className
+        }
+    )
+    items = response['Item']
+    pri_color = items['primary_color']
+    sec_color = items['secondary_color']
+
+
     table = dynamodb.Table('lessons')
     feedback = []
     table.put_item(
@@ -315,10 +321,15 @@ def create_survey():
             'feedback': feedback,
             'class': className,
             'lesson_name': lesson,
-            'class_name': className
+            'class_name': className,
+            'primary_color': pri_color,
+            'secondary_color': sec_color
         }
     )
-    lesson_list.append(Lesson(lesson, className, "#67d7ce","#b5faf6", code, q, feedback))
+    # Add color from the correct class
+    # get item from table classes (the item is the class)
+    # from that item, pull the primary and secondary colors, and put them into lesson_list (the next line)
+    lesson_list.append(Lesson(lesson, className, pri_color, sec_color, code, q, feedback))
     table = dynamodb.Table('classes')
     result = table.update_item(
         Key={

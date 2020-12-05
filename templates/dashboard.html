@@ -28,12 +28,18 @@
             </div>
             <div class="suggested-actions">
                 {% if latestcode == "NULL" %}
-                    <p>You don't have any surveys! Try adding one!</p> <!-- Remove afterwards, just for testing purposes -->
+                <div class="suggestion">You don't have any surveys! Try adding one!</div>
                 {% else %}
                 <b class="suggestion">Suggested Actions</b>
-                    <div class="suggestion"><input type=checkbox id="s1"><label for="s1"><b>Great Gatsby: </b></label>Explain New vs. Old Money</div>
-                    <div class="suggestion"><input type=checkbox value="s2"><label for="s2"><b>Prepositions: </b></label>Students would like to see more sentence use examples</div>
-                    <div class="suggestion"><input type=checkbox value="s3"><label for="s3"><b>Active vs. Passive Voice: </b></label>Another group exercise might help</div>
+                    {% if recommendations %}
+                        {% for r in recommendations %}
+                            <div class="suggestion"><input type=checkbox id="s1"><label for="s1"></label>{{  r  }}</div>
+                            <!--<div class="suggestion"><input type=checkbox value="s2"><label for="s2"></label>r[1]</div>
+                            <div class>="suggestion"><input type=checkbox value="s3"><label for="s3"><b>Active vs. Passive Voice: </b></label>Another group exercise might help</div>-->
+                        {% endfor %}
+                    {% else %}
+                        <div class="suggestion">You don't have any feedback yet. Try again later!</div>
+                    {% endif %}
                 {% endif %}
                 </div>
             {% if latestcode != "NULL" %}
@@ -41,6 +47,7 @@
                 <b>Student Sentiment</b>
                 <div class="gray-small">Your Latest Survey</div>
             </div>
+            {% if chartData != [0, 0, 0, 0] %}
             <canvas class='space-bottom' id="pieChart" height="75"></canvas>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" type="text/javascript"></script>
             <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
@@ -85,6 +92,9 @@
                     }
                 });
             </script>
+            {% else %}
+                <p>You don't have any feedback from your surveys yet. Try sending one out!</p>
+            {% endif %}
             {% endif %}
         </div>
     </body>
