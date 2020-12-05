@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="stylesheet" href="/static/css/createSurvey.css">
+        <link rel="stylesheet" href="/static/css/dashboard.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
     </head>
-    <body>
-        <h1>Survey for {{ lessonName }}</h1>
-        <form action="{{ url_for('create_survey', lesson=lessonName) }}" id='create-survey-form' method='post'>
-            <input type='text' id='survey-question' name='survey-question' placeholder='Insert question here' >
-            <input  class="" type = "submit" value = "Create Survey" />
-        </form>
+    <body class="App">
+        {% include "nav.html" %}
+        {% include "circles.html" %}
+        <div class="page">
+            <div class="header welcome">
+                <div>Create New Survey for</div>
+                <div>{{ className }}</div>
+            </div>
+            <form action="{{ url_for('create_survey', className=className) }}" class="align-left" id='create-survey-form' method='post'>
+                <label for='survey-title'> Title of Survey:</label><br>
+                <textarea class="lessonName" id='survey-title' name='survey-title' ></textarea><br>
+                <label for='survey-question'> Question 1:</label><br>
+                <textarea id='survey-question' name='survey-question' ></textarea><br>
+                <input class="green-button create" type = "submit" value = "Create Survey" />
+            </form>
+        </div>
     </body>
 </html>

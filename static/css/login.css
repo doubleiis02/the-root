@@ -1,0 +1,65 @@
+.logo {
+    margin-top: 50px;
+    width: 80px;
+    height: 80px;
+}
+
+.the-root {
+    color: #6C9331;
+    margin: 20px;
+    font-size: 1.5rem;
+}
+
+.login-title {
+    margin: 35px;
+    font-size: 1.3rem;
+}
+
+p {
+    color: red;
+}
+
+.input {
+    padding-left: 30px;
+    margin: 10px;
+    align-items: center;
+    font-weight: 300;
+    border-radius: 25px;
+    padding: 10px 0px 10px 40px;
+    font-size: 1rem;
+    width: 300px;
+}
+input:focus {
+    outline: none;
+}
+
+::placehodler {
+    opacity: 0.35;
+}
+
+.name {
+    background: url('/static/img/name.svg') no-repeat scroll 10px 8px;
+    background-size: 22px;
+}
+
+.email {
+    background: url('/static/img/email.png') no-repeat scroll 10px 11px;
+}
+
+.password {
+    background: url('/static/img/password.png') no-repeat scroll 10px 11px;
+}
+
+.submit {
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    background-color: #6C9331;
+    padding: 7px;
+    border-radius: 25px;
+    margin: 20px 0;
+    width: 340px;
+}
+.submit:hover {
+    box-shadow: 0px 0px 5px 1px rgb(196, 196, 196);
+}

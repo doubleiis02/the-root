@@ -1,0 +1,46 @@
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 50px 0px 0px 0px;
+}
+
+.align-left {
+    text-align: left;
+    margin-top: 30px;
+}
+
+label {
+    font-weight: bold;
+    color: #878686;
+    font-size: 1.2rem;
+    position: relative;
+    left: 4px;
+}
+
+textarea {
+    width: 400px;
+    height: 200px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    border: 1.5px solid black;
+    font-family: 'Poppins', sans-serif;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+.lessonName {
+    height: 20px;
+}
+
+.create {
+    border: none;
+    position: relative;
+    left: 110px;
+}
+.create:focus {
+    outline: none;
+}
