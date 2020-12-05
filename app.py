@@ -6,6 +6,8 @@ import random
 import string
 import pymongo
 import boto3
+from boto3.dynamodb.conditions import Key, Attr
+import NLP.nlp_algorithms as nlp
 
 app = Flask(__name__)
 app.secret_key="super secret key"
@@ -24,18 +26,6 @@ class Classes:
 #class_list = [Classes('English 1A', '#67d7ce', '#b5faf6'), Classes('English 1B', '#91cc49', '#d2f68b'),
 #                Classes('English 1C', '#2cb2d6', '#71e9fa'), Classes('English 1D', '#7cb36e', '#b8ebac')]
 # Getting email of the teacher
-""" if 'email' in session:
-    email = session['email']
-
-class_table = dynamodb.Table('classes')
-response = class_table.query(
-        KeyConditionExpression=Key('email').eq(email)
-)
-classes = response['Items']
-class_list = []
-for _classes in classes:
-    class_list.append(Classes(_classes['class'], _classes['primary_color'], _classes['secondary_color'])) """
-
 
 
 class Lesson:
@@ -47,11 +37,6 @@ class Lesson:
         self.code = code
         self.questions = questions
         self.responses = responses
-
-lesson_list = [
-    Lesson('Week 1', 'English 1A', '#67d7ce', '#b5faf6', 'abcde', ["How did you like the class?", "Any suggestions?"], [["Great", "nope"], ["Amazing", "no"]]),
-    Lesson('Week 1', 'English 1B', '#91cc49', '#d2f68b', 'fghijk', ["How do you feel about the class?", "How can the class be improved?"], [["It's alright", "idk"], ["Great!", "less homework"]])
-]
 
 lesson_list = [] # Create empty lesson list
 
@@ -69,14 +54,6 @@ def index():
     if 'email' in session:
         email = session['email']
     return render_template('index.html', class_list=class_list, name=name)
-
-""" class_table = dynamodb.Table('classes')
-    response = class_table.query(
-           KeyConditionExpression=Key('email').eq(email)
-    )
-    classes = response['Items']
-    for _classes in classes:
-        class_list.append(Classes(_classes['class'], _classes['primary_color'], _classes['secondary_color'])) """
     
 if __name__== '__main__':
     app.run(debug=True)
@@ -134,7 +111,8 @@ def dashboard():
         }
     )
     items = response['Item']
-    if 'latest_code' in items:        
+    print(items)
+    if 'latest_code' in items:    
         latest_code = items['latest_code'][0]
         # Now that we have the latest code, we can pass the feedback into the algorithm
         # get the feedback given the latest code
@@ -163,11 +141,24 @@ def dashboard():
             if s == "Don't understand":
                 dont += 1
         data = [completely, mostly, slightly, dont]
+        
+        # make sure the feedback list is not empty
+        if feedback:
+            # make sure the list of negative feedback is not empty
+            neg_feedback = []
+            for i in feedback:
+                if nlp.feedbackSent(i) == -1:
+                    neg_feedback.append(i)
+            if neg_feedback:
+                recommend = nlp.getRecommendation(feedback)
+                print(feedback)
+                print(recommend)
+    
         return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code, chartData=data)
     else:
         # Probably display error message if code is null
         latest_code = "NULL"
-        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code, data=[])
+        return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code, chartData=[])
 
 
     # getting all feedbacks for one survey and pass into the nlp
