@@ -30,10 +30,14 @@
 
                 <!-- THE PART BELOW NEEDS TO BE STYLED. WORK ON IT AFTER YOU CAN VIEW LESSONS LIST-->
 
-                <div>Question 1: {{ question }}</div>
-                {% for f in feedback %}
-                    <div>{{ f[0] }}</div>
-                {% endfor %}
+                <div class='question-1'>Question 1: {{ question }}</div>
+                <div class='feedback-container'>
+                    <u1>
+                    {% for f in feedback %}
+                        <li class='response'>{{ f[0] }}</li>
+                    {% endfor %}
+                    </u1>
+                </div>
             {% endif %}
             <div class="buttons">
                 <a href="{{ url_for('lessons') }}" class="back-button">Back to Lessons</a>
