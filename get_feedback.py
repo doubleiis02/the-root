@@ -4,16 +4,14 @@ import boto3
 import NLP.nlp_algorithms as nlp
 
 dynamodb = boto3.resource('dynamodb', 
-                        aws_access_key_id="key", 
-                        aws_secret_access_key="key", 
-                        region_name='us-east-1')
+                        aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
 table = dynamodb.Table('lessons')
 
 # response will be a dic satisfying the 2 criteria 
 response = table.get_item(
     Key={
-        'email' : "grace@gmai.com",
-        'code'  : "SCJ386"
+        'email' : "@gmail.com",
+        'code'  : ""
     }
 )
 
@@ -30,3 +28,4 @@ for ele in feedback:
 
 recommend = nlp.getRecommendation(allfeedback_list)
 
+print(recommend)

@@ -4,7 +4,7 @@ Chart.defaults.global.legend.labels.usePointStyle = true;
 
 var ctx = document.getElementById("pieChart");
 var pieChart = new Chart(ctx, {
-    type: 'pie',
+    type: 'donut',
     data: {
         labels: ['Completely Understand', 'Somewhat Understand', 'Moderately Understand', 'Don\'t Understand'],
         datasets: [{
