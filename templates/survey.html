@@ -1,15 +1,47 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="stylesheet" href="/static/css/lesson.css">
+        <link rel='stylesheet' href='/static/css/dashboard.css'>
+        <link rel='stylesheet' href="/static/css/survey.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
     </head>
-    <body>
-        <h1>{{ lessonName }}</h1> 
-        Question 1:
-        {{ question }}
-        <form action="{{ url_for('add_response', lessonCode=code) }}" id='survey-answer-form' method='post'>
-            <input type='text' id='feedback' name='feedback'/>
-            <input type='submit' value="Sumbit"/>
-        </form>
+    <body class="App">
+        <div class='no-nav'>{% include "circles.html" %}</div>
+        <div class="page">
+            <div class="header welcome">{{ lessonName }}</div>
+            <div class="message">Remember, there are no wrong answers. This survey is to help your instructor clear up any confusion on the course material.</div>
+            <form action="{{ url_for('add_response', lessonCode=code) }}" id='survey-answer-form' method='post'>
+                <div class="horizontal">
+                    <div class='q container'>
+                        <div class='number'>Question 1</div>
+                        <label class='question' for='feedback'>{{ question }}</label>
+                        <textarea id='feedback' name='feedback' required></textarea>
+                    </div>
+                    <div class='sentiment container'>
+                        <div class='question'>How well did this week's material click for you?</div>
+                        <div class='option'>
+                            <input type='radio' id='completely' name='sentiment' value='Completely understand' required>
+                            <label for='completely'>Completely understand</label>
+                        </div>
+                        <div class='option'>
+                            <input type='radio' id='mostly' name='sentiment' value='Mostly understand' required>
+                            <label for='mostly'>Mostly understand</label>
+                        </div>
+                        <div class='option'>
+                            <input type='radio' id='slightly' name='sentiment' value='Slightly understand' required>
+                            <label for='slightly'>Slightly understand</label>
+                        </div>
+                        <div class='option'>
+                            <input type='radio' id='dont' name='sentiment' value="Don't understand" required>
+                            <label for='dont'>Don't understand</label>
+                        </div>
+                    </div>
+                </div>
+                <input class='green-button no-border' type='submit' value="Submit Survey"/>
+            </form>
+        </div>
     </body>
 </html>

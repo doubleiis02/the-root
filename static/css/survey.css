@@ -1,0 +1,52 @@
+.horizontal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 25px;
+    text-align: left;
+    margin: 30px;
+}
+
+.q {
+    width: 300px;
+}
+
+.number {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.question {
+    font-weight: bold;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+textarea {
+    border-radius: 10px;
+    height: 240px;
+    font-family: 'Poppins', sans-serif;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+.sentiment {
+    background: linear-gradient(180deg, rgba(158, 201, 93, 0.75) 0%, rgba(108, 196, 229, 0.75) 99.99%, rgba(158, 201, 93, 0.75) 100%);
+    text-align: left;
+    padding: 20px;
+    color: white;
+    width: 250px;
+}
+
+.option {
+    font-size: 1.2rem;
+    margin: 20px 0;
+}

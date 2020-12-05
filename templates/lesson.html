@@ -17,7 +17,7 @@
                     <div class="survey-for">Survey for {{ className }} </div>
                 </div>
             </div>
-            {% if feedback == [] %}
+            {% if not feedback %}
                 <div class="subtitle">Success!</div>
                 <div class="message">Your survey has been created and is<br>ready to be sent to students.</div>
                 <img src="/static/img/success.png"/>
@@ -25,17 +25,15 @@
             <div class="subtitle">Your Survey Code:</div>
             <div class="code">{{ code }}</div>
             <a class="link" href="/goto_code_page">link to survey</a>
-            {% if feedback != [] %}
+            {% if feedback %}
                 <div class="subtitle">Student Feedback</div>
 
                 <!-- THE PART BELOW NEEDS TO BE STYLED. WORK ON IT AFTER YOU CAN VIEW LESSONS LIST-->
 
                 <div>Question 1: {{ question }}</div>
-                <div>
-                    {% for f in feedback %}
-                        <div>{{ f }}</div>
-                    {% endfor %}
-                </div>
+                {% for f in feedback %}
+                    <div>{{ f[0] }}</div>
+                {% endfor %}
             {% endif %}
             <div class="buttons">
                 <a href="{{ url_for('lessons') }}" class="back-button">Back to Lessons</a>

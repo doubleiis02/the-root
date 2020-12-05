@@ -1,12 +1,11 @@
 
 Chart.defaults.global.legend.labels.usePointStyle = true;
 
-
 var ctx = document.getElementById("pieChart");
 var pieChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-        labels: ['Completely Understand', 'Mostly Understand', 'Don\'t Fully Understand', 'Don\'t Understand'],
+        labels: ['Completely Understand', 'Mostly Understand', 'Slightly Understand', 'Don\'t Understand'],
         datasets: [{
             backgroundColor: [
                 "#553AFA",
@@ -14,12 +13,12 @@ var pieChart = new Chart(ctx, {
                 "#56B0D2",
                 "#3AB74E"
             ],
-            data: [30, 37, 13, 20]
+            data: {{ chartData | tojson }}
         } ]
     },
     options: {
         legend: {
-            position: 'right'
+            position: 'bottom'
         },
         tooltips: {
             enabled: false

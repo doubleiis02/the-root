@@ -103,3 +103,10 @@ input {
 .green-button:hover {
     box-shadow: 0px 0px 5px 1px rgb(196, 196, 196);
 }
+.green-button:focus {
+    outline: none;
+}
+
+.space-bottom {
+    margin-bottom: 30px;
+}

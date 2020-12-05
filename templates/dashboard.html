@@ -36,14 +36,56 @@
                     <div class="suggestion"><input type=checkbox value="s3"><label for="s3"><b>Active vs. Passive Voice: </b></label>Another group exercise might help</div>
                 {% endif %}
                 </div>
+            {% if latestcode != "NULL" %}
             <div class="welcome left">
                 <b>Student Sentiment</b>
-                <div class="gray-small">Week of December 6</div>
+                <div class="gray-small">Your Latest Survey</div>
             </div>
-            <canvas id="pieChart" height="75"></canvas>
+            <canvas class='space-bottom' id="pieChart" height="75"></canvas>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" type="text/javascript"></script>
             <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
-            <script src="/static/js/chart.js"></script>
+            <script>
+                Chart.defaults.global.legend.labels.usePointStyle = true;
+                var ctx = document.getElementById("pieChart");
+                var pieChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Completely Understand', 'Mostly Understand', 'Slightly Understand', 'Don\'t Understand'],
+                        datasets: [{
+                            backgroundColor: [
+                                "#553AFA",
+                                "#954ECD",
+                                "#56B0D2",
+                                "#3AB74E"
+                            ],
+                            data: {{ chartData | tojson }}
+                        } ]
+                    },
+                    options: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltips: {
+                            enabled: false
+                        },
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value*100 / sum)+"%";
+                                    return percentage;
+                                },
+                                color: 'white',
+                            }
+                        }
+                    }
+                });
+            </script>
+            {% endif %}
         </div>
     </body>
 </html>
