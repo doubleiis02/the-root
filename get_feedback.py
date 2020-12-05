@@ -4,7 +4,7 @@ import boto3
 import NLP.nlp_algorithms as nlp
 
 dynamodb = boto3.resource('dynamodb', 
-                        aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
+                        aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
 table = dynamodb.Table('lessons')
 
 # response will be a dic satisfying the 2 criteria 
