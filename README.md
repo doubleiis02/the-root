@@ -1,6 +1,4 @@
-# cruisin-for-a-bruin
+# the-root
 
-Source code for YTP app\
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-Test
+Source code for 2020 Young Tech Professionals team 4 (cruisin-for-a-bruin) app\
+App Deployment: http://doubleiis02.pythonanywhere.com/
