@@ -7,7 +7,10 @@ from numpy import random
 from collections import Counter
 
 # Setting up test data and comprehend client
-comprehend = boto3.client('comprehend', aws_access_key_id="key", aws_secret_access_key="secret access key", region_name='us-east-1')
+comprehend = boto3.client('comprehend', 
+                        aws_access_key_id="AKIAQMIVM4QIASTAN2G4", 
+                        aws_secret_access_key="hFzaGLqizpvzof5VsoeiCpd7qmwyTlguRxqq241f", 
+                        region_name='us-east-1')
 text = "If you like to have a custom sentiment analyzer for your domain, it is possible to train a classifier using flair using your dataset. The drawback of using a flair pre-trained model for sentiment analysis is that it is trained on IMDB data and this model might not generalize well on data from other domains like twitter."
 text2 = "I am confused about the pythagorean theorem. I don't understand the "
 responses = ["I don\'t understand the pythagorean theorem.",
@@ -29,7 +32,7 @@ def keyphrase(text):
         kp.append(i['Text'])
     return kp
 
-print(comprehend.detect_key_phrases(Text=responses[1], LanguageCode='en'))
+# print(keyphrase(text2))
 
 # Sentiment
 # Takes in a string and returns a value (-1, 0, 1) denoting the overall sentiment
@@ -47,7 +50,7 @@ def feedbackSent(text):
     
 # Providing recommendations
 # Takes in a list of all student responses
-# Returns a list of top 3 recommendations
+# Returns a recommendations
 def getRecommendation(feedback):
 
     # Pick out negative sentiment responses
@@ -64,7 +67,7 @@ def getRecommendation(feedback):
     # Identify and sort by most repeated key phrases in student feedback
     counts = Counter(neg_kp)
     repeated_kp = counts.most_common()
-
+    # print(repeated_kp)
     # Hard coded random templates for recommendations
     templates = ['Review ',
                  'Consider focusing on ',
@@ -72,13 +75,12 @@ def getRecommendation(feedback):
                  'Your class is confused about ',
                  'Spend more time going over ']
 
-    # Generates recommendations
-    recommendation = []
-    for i in range(3):
-        print(repeated_kp[i][0])
-        recommendation.append(templates[random.randint(1,len(templates))]+str.strip(repeated_kp[i][0])+'.')
+    # Generates recommendation
+    recommendation = templates[random.randint(1,len(templates))]+str.strip(repeated_kp[0][0])+'.'
     
     return recommendation
+
+# print(getRecommendation(responses))
 
 # pctNegative function returns total % of students that responded negatively to survey
 # Takes in a list of all responses
@@ -93,4 +95,4 @@ def pctNegative(responses):
     
     return round(float(numNeg)/len(responses), 2)
 
-print(pctNegative(responses))
+#print(pctNegative(responses))
