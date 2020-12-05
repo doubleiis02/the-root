@@ -81,3 +81,24 @@ img {
 .back-button:hover {
     box-shadow: 0px 0px 5px 1px rgb(196, 196, 196);
 }
+
+.question-1 {
+    font-size: 1.2rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.feedback-container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 25px;
+    border: gray 2px solid;
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.response {
+    font-size: 1.2rem;
+    margin: 10px;
+}
