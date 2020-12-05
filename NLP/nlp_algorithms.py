@@ -8,9 +8,8 @@ from collections import Counter
 
 # Setting up test data and comprehend client
 comprehend = boto3.client('comprehend', 
-                        aws_access_key_id="key", 
-                        aws_secret_access_key="key", 
-                        region_name='us-east-1')
+                       aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
+
 text = "If you like to have a custom sentiment analyzer for your domain, it is possible to train a classifier using flair using your dataset. The drawback of using a flair pre-trained model for sentiment analysis is that it is trained on IMDB data and this model might not generalize well on data from other domains like twitter."
 text2 = "I am confused about the pythagorean theorem. I don't understand the "
 responses = ["I don\'t understand the pythagorean theorem.",
@@ -67,7 +66,8 @@ def getRecommendation(feedback):
     # Identify and sort by most repeated key phrases in student feedback
     counts = Counter(neg_kp)
     repeated_kp = counts.most_common()
-    # print(repeated_kp)
+    #print(repeated_kp)
+    #print(len(repeated_kp))
     # Hard coded random templates for recommendations
     templates = ['Review ',
                  'Consider focusing on ',
@@ -75,9 +75,14 @@ def getRecommendation(feedback):
                  'Your class is confused about ',
                  'Spend more time going over ']
 
-    # Generates recommendation
-    recommendation = templates[random.randint(1,len(templates))]+str.strip(repeated_kp[0][0])+'.'
-    
+    # Generate recommendations
+    recommendation = []
+    if (len(repeated_kp) < 3):
+        for i in range(len(repeated_kp)):
+            recommendation.append(templates[random.randint(1,len(templates))]+str.strip(repeated_kp[i][0])+'.')
+    else:
+        for i in range(3):
+            recommendation.append(templates[random.randint(1,len(templates))]+str.strip(repeated_kp[i][0])+'.')
     return recommendation
 
 # print(getRecommendation(responses))
