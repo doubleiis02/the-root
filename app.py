@@ -12,17 +12,8 @@ import NLP.nlp_algorithms as nlp
 app = Flask(__name__)
 app.secret_key="super secret key"
 
-<<<<<<< HEAD
 dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
 client = boto3.client('dynamodb', aws_access_key_id="AKIAQMIVM4QIASTAN2G4", aws_secret_access_key="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", region_name='us-east-1')
-=======
-dynamodb = boto3.resource('dynamodb', 
-                        aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
-
-client = boto3.client('dynamodb', 
-                        aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
-
->>>>>>> main
 from boto3.dynamodb.conditions import Key, Attr
 
 
@@ -35,18 +26,6 @@ class Classes:
 #class_list = [Classes('English 1A', '#67d7ce', '#b5faf6'), Classes('English 1B', '#91cc49', '#d2f68b'),
 #                Classes('English 1C', '#2cb2d6', '#71e9fa'), Classes('English 1D', '#7cb36e', '#b8ebac')]
 # Getting email of the teacher
-""" if 'email' in session:
-    email = session['email']
-
-class_table = dynamodb.Table('classes')
-response = class_table.query(
-        KeyConditionExpression=Key('email').eq(email)
-)
-classes = response['Items']
-class_list = []
-for _classes in classes:
-    class_list.append(Classes(_classes['class'], _classes['primary_color'], _classes['secondary_color'])) """
-
 
 
 class Lesson:
@@ -58,11 +37,6 @@ class Lesson:
         self.code = code
         self.questions = questions
         self.responses = responses
-
-lesson_list = [
-    Lesson('Week 1', 'English 1A', '#67d7ce', '#b5faf6', 'abcde', ["How did you like the class?", "Any suggestions?"], [["Great", "nope"], ["Amazing", "no"]]),
-    Lesson('Week 1', 'English 1B', '#91cc49', '#d2f68b', 'fghijk', ["How do you feel about the class?", "How can the class be improved?"], [["It's alright", "idk"], ["Great!", "less homework"]])
-]
 
 lesson_list = [] # Create empty lesson list
 
@@ -80,14 +54,6 @@ def index():
     if 'email' in session:
         email = session['email']
     return render_template('index.html', class_list=class_list, name=name)
-
-""" class_table = dynamodb.Table('classes')
-    response = class_table.query(
-           KeyConditionExpression=Key('email').eq(email)
-    )
-    classes = response['Items']
-    for _classes in classes:
-        class_list.append(Classes(_classes['class'], _classes['primary_color'], _classes['secondary_color'])) """
     
 if __name__== '__main__':
     app.run(debug=True)
@@ -171,7 +137,9 @@ def dashboard():
                     neg_feedback.append(i)
             if neg_feedback:
                 recommend = nlp.getRecommendation(feedback)
-
+                print(feedback)
+                print(recommend)
+    
         return render_template('dashboard.html', className=className, color=color, name=name, latestcode=latest_code)
     else:
         # Probably display error message if code is null
