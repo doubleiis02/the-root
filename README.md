@@ -1,6 +1,6 @@
 # the-root
 
-**The Root** is Team 4's (Curisin' for a Bruin) submission for the 2020 Fall Quarter [YTP Virtual Tech Bootcamp.](https://isassociates.atlassian.net/wiki/spaces/MEM/pages/1176436737/2020+Fall+Quarter+YTP+Virtual+Tech+Bootcamp+Portal)
+This is Team 4's (Curisin' for a Bruin) submission for the 2020 Fall Quarter [YTP Virtual Tech Bootcamp.](https://isassociates.atlassian.net/wiki/spaces/MEM/pages/1176436737/2020+Fall+Quarter+YTP+Virtual+Tech+Bootcamp+Portal)
 
 **The Root is a web app that aims to bolster teachers' performance as it paves way to create an engaged learning experience for all students.**
 
