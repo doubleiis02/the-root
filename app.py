@@ -12,13 +12,9 @@ import NLP.nlp_algorithms as nlp
 app = Flask(__name__)
 app.secret_key="super secret key"
 
-<<<<<<< HEAD
 dynamodb = boto3.resource('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
 client = boto3.client('dynamodb', aws_access_key_id="", aws_secret_access_key="", region_name='us-east-1')
-=======
-dynamodb = boto3.resource('dynamodb', aws_access_key_id="AKIAQMIVM4QICTEYVVMV", aws_secret_access_key="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", region_name='us-east-1')
-client = boto3.client('dynamodb', aws_access_key_id="AKIAQMIVM4QICTEYVVMV", aws_secret_access_key="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", region_name='us-east-1')
->>>>>>> main
+
 from boto3.dynamodb.conditions import Key, Attr
 
 
