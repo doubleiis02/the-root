@@ -23,6 +23,8 @@ Watch the demo of our app [here](https://drive.google.com/file/d/1VHnsRP4VFdA2yw
 5. The web app is now running. Feel free to create a new user and add some classes/surveys, or log into a sample account made for demonstration purposes with the following information: 
     - Email: `das@cs.ucla.edu`
     - Password: `das`
+    
+6. Note: If you would like to login with a different account, or make a new account once you have already logged in with one, you will have to click on the link from 1) again, and reload the application.
 
 ## Contact
 
